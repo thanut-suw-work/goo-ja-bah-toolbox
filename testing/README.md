@@ -30,6 +30,7 @@ testing/
 npm test              # run once
 npm run test:watch    # watch mode
 
-# e2e (build + preview via playwright.config webServer)
+# e2e — one-time browser install, then run (build + preview via playwright.config webServer)
+npx playwright install chromium
 npm run test:e2e
 ```
