@@ -3,10 +3,11 @@ import { AppShell } from './AppShell'
 import { HomePage } from './HomePage'
 import { ToolPage } from './ToolPage'
 import { NotFoundPage } from './NotFoundPage'
+import { routerBasename } from './routerBasename'
 
 export function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={routerBasename(import.meta.env.BASE_URL)}>
       <Routes>
         <Route element={<AppShell />}>
           <Route index element={<HomePage />} />
