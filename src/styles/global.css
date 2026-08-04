@@ -256,7 +256,8 @@ button {
   font-size: var(--text-sm);
   color: var(--text-tertiary);
   margin: var(--space-4) 0 var(--space-4);
-  white-space: nowrap;
+  width: max-content;
+  max-width: 100%;
 }
 
 .tool-list {
