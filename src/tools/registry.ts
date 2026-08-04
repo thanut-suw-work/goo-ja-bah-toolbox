@@ -38,6 +38,12 @@ export const tools: ToolDefinition[] = [
     description: 'Convert text between lower, upper, title, camel, and snake case.',
     component: lazy(() => import('./text-case/TextCaseTool')),
   },
+  {
+    id: 'pdf-to-image',
+    title: 'PDF to image',
+    description: 'Convert a PDF page range to PNG or JPG in your browser.',
+    component: lazy(() => import('./pdf-to-image/PdfToImageTool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {
