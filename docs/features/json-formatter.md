@@ -1,18 +1,20 @@
 # Feature: JSON formatter
 
+**Registry id:** `json-formatter` · Route: `/tools/json-formatter`
+
 ## Purpose
 
-Format / prettify (and optionally minify) JSON text entirely in-browser.
+Format JSON text entirely in-browser with pretty-print or minify modes.
 
 ## Behavior
 
-- Textarea input → validate → pretty-print or minify
-- Invalid JSON → inline error; do not clear input
-- Copy result via explicit user action only
+- Textarea input → validate → pretty-print or minify (mode selector)
+- Invalid JSON → inline error; input is preserved
+- Output shown in read-only textarea (manual select/copy; no auto-clipboard)
 
 ## Logic
 
-Pure functions preferred: `formatJson(input, mode) → { ok, text, error }`.
+Pure function: `formatJson(input, mode: 'pretty' | 'minify') → { ok, text, error }`.
 
 ## Tests
 

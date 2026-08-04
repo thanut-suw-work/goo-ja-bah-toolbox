@@ -1,15 +1,22 @@
 # Feature: Unix timestamp
 
+**Registry id:** `unix-timestamp` · Route: `/tools/unix-timestamp`
+
 ## Purpose
 
-Convert between Unix timestamps and human-readable time in-browser.
+Convert between Unix seconds and ISO UTC date/time in-browser.
 
 ## Behavior
 
-- Timestamp → formatted date/time
-- Date/time → timestamp
-- Invalid input → inline error
-- Document timezone/UTC behavior in UI copy
+- **Unix seconds → ISO UTC:** numeric seconds input → `toISOString()` output
+- **ISO UTC → Unix seconds:** ISO string input → floored Unix seconds
+- Invalid input → inline error per direction
+- UI labels document UTC (ISO output always ends with `Z`)
+
+## Logic
+
+- `timestampToIsoUtc(seconds) → { ok, iso, error }`
+- `isoToUnixSeconds(iso) → { ok, seconds, error }`
 
 ## Tests
 

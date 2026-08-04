@@ -6,8 +6,8 @@ Landing surface listing GJB Toolbox tools. Brand-forward, operable (Impeccable O
 
 ## Behavior
 
-- Read tools from registry
-- Show title + short description per tool
+- Read all seven tools from registry
+- Show title + description per tool as navigable links
 - Navigate to `/tools/:id` on select
 - No persisted “recent” or favorites (ephemeral product)
 

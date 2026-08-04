@@ -13,7 +13,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | Adding a **new** tool | `features/tool-registry.md` (checklist), create `features/<id>.md`, mirror tests per `../testing/README.md` |
 | PDF → image work | `features/pdf-to-image.md`, `privacy.md` |
 | Writing or fixing tests | `../testing/README.md` + mirrored path under `testing/` |
-| UI / visual design | Impeccable (`PRODUCT.md`, `DESIGN.md`); Operate mode |
+| UI / visual design | Impeccable Operate mode; honor repo-root `PRODUCT.md` and `DESIGN.md` |
 | Revisiting product decisions | `superpowers/specs/2026-08-05-gjb-toolbox-design.md` |
 
 ## Design specs
@@ -41,3 +41,10 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `features/unix-timestamp.md` | Unix timestamp |
 | `features/text-case.md` | Text case |
 | `features/pdf-to-image.md` | PDF → PNG/JPG with page range |
+
+## UI reference (repo root)
+
+| File | Purpose |
+|------|---------|
+| `../PRODUCT.md` | Product positioning and UX principles (Impeccable) |
+| `../DESIGN.md` | Visual design system tokens and patterns (Impeccable) |

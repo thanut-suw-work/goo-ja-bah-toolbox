@@ -1,15 +1,21 @@
 # Feature: UUID
 
+**Registry id:** `uuid` · Route: `/tools/uuid`
+
 ## Purpose
 
-Generate UUIDs in-browser (prefer `crypto.randomUUID` when available).
+Generate UUID v4 identifiers in-browser via `crypto.randomUUID`.
 
 ## Behavior
 
-- Generate one or many UUIDs
-- Copy via explicit user action
+- Generate 1–100 UUIDs (count input clamped in logic)
+- Output: one UUID per line in read-only textarea
 - No persistence of generated values
+
+## Logic
+
+`generateUuids(count) → string[]`
 
 ## Tests
 
-Mirror under `testing/unit/tools/uuid/` (mock crypto if needed).
+Mirror under `testing/unit/tools/uuid/`.
