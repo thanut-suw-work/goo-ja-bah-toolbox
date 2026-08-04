@@ -15,6 +15,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | Writing or fixing tests | `../testing/README.md` + mirrored path under `testing/` |
 | UI / visual design | Impeccable Operate mode; honor repo-root `PRODUCT.md` and `DESIGN.md` |
 | Revisiting product decisions | `superpowers/specs/2026-08-05-gjb-toolbox-design.md` |
+| Deploying / changing Pages CI or Vite `base` | `architecture.md` (Deploy), `superpowers/specs/2026-08-05-github-pages-deploy-design.md` |
 
 ## Design specs
 
