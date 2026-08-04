@@ -172,7 +172,8 @@ button {
 
 .brand {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
+  gap: var(--space-2);
   text-decoration: none;
   border-radius: var(--radius-sm);
 }
@@ -180,6 +181,11 @@ button {
 .brand:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
+}
+
+.brand__mark {
+  flex-shrink: 0;
+  color: var(--brass-strong);
 }
 
 .brand__word {
@@ -268,6 +274,10 @@ button {
 
 .tool-row {
   border-bottom: 1px solid var(--line);
+}
+
+.tool-row:last-child {
+  border-bottom: none;
 }
 
 .tool-row__link {
@@ -558,6 +568,18 @@ button {
 .tool-load-error__actions button:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* Flush IoPanel fields: ring-0 still leaves ring-offset-2 box-shadow, which
+   washes the card border on focus. Keep idle and focused borders identical. */
+[data-io-panel] textarea:focus,
+[data-io-panel] textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-width: 0px;
+  --tw-ring-offset-width: 0px;
 }
 
 /* ---------------------------------------------------------------------- */

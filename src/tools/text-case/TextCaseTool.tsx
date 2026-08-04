@@ -36,7 +36,7 @@ export function TextCaseTool() {
         >
           <Textarea
             aria-label="Text case input"
-            className="min-h-[300px] resize-none rounded-none border-0 font-mono focus-visible:ring-0"
+            className="min-h-[300px] resize-none rounded-none border-0 font-mono focus-visible:ring-0 focus-visible:ring-offset-0"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
@@ -61,7 +61,7 @@ export function TextCaseTool() {
           <Textarea
             aria-label="Text case output"
             readOnly
-            className="min-h-[300px] resize-none rounded-none border-0 bg-muted/30 font-mono focus-visible:ring-0"
+            className="min-h-[300px] resize-none rounded-none border-0 bg-muted/30 font-mono focus-visible:ring-0 focus-visible:ring-offset-0"
             value={output}
           />
         </IoPanel>

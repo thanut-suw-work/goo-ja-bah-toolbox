@@ -58,7 +58,7 @@ export function UuidTool() {
             aria-label="UUID output"
             readOnly
             rows={10}
-            className="min-h-[300px] resize-none rounded-none border-0 bg-muted/30 font-mono focus-visible:ring-0"
+            className="min-h-[300px] resize-none rounded-none border-0 bg-muted/30 font-mono focus-visible:ring-0 focus-visible:ring-offset-0"
             value={output}
           />
         </IoPanel>

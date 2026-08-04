@@ -2,6 +2,7 @@
 .impeccable/config.local.json
 .claude/settings.local.json
 .worktrees/
+ui-prototype/
 
 # Logs
 logs

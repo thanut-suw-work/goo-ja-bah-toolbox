@@ -20,8 +20,7 @@ export function HomePage() {
           ))}
         </ul>
         <p className="home-hero__origin">
-          I built this after getting stuck on apps that only accept tax invoices as
-          images — I had a PDF.
+          I built this after getting stuck on apps that only accept tax invoices as images — I had a PDF...
         </p>
       </div>
       <hr className="home-divider" />

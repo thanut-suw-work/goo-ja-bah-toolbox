@@ -15,7 +15,7 @@ type PanelProps = {
 
 export function IoPanel({ title, actions, children, className }: PanelProps) {
   return (
-    <Card className={className}>
+    <Card data-io-panel className={className}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 py-4">
         <CardTitle className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
           {title}
