@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-04T18:20:00Z",
+  "title": "Design System: GJB Toolbox",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Steel Paper",
+        "canonical": "#f2f3f6",
+        "tonalRamp": ["#1f232d", "#3a4154", "#565f7c", "#747f9f", "#9ca3ba", "#bdc2d1", "#dbdee6", "#f0f1f5"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Raised White",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#262626", "#474747", "#696969", "#8a8a8a", "#ababab", "#c7c7c7", "#e0e0e0", "#f2f2f2"]
+      },
+      "text-primary": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#14171d",
+        "tonalRamp": ["#1f242d", "#3a4355", "#55627c", "#74839f", "#9ba6ba", "#bdc3d1", "#dbdfe6", "#f0f1f5"]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Brass Fill",
+        "canonical": "#d99a3f",
+        "tonalRamp": ["#402b0d", "#775018", "#af7523", "#d8983b", "#e3b573", "#eccea1", "#f5e4cc", "#fbf4ea"]
+      },
+      "accent-strong": {
+        "role": "primary",
+        "displayName": "Deep Copper",
+        "canonical": "#a35a17",
+        "tonalRamp": ["#432509", "#7d4512", "#b7651a", "#e28631", "#eaa86c", "#f1c59d", "#f7dfc9", "#fcf2e9"]
+      },
+      "danger": {
+        "role": "error",
+        "displayName": "Brick Red",
+        "canonical": "#b23a26",
+        "tonalRamp": ["#3f150d", "#762619", "#ac3825", "#d6533e", "#e18474", "#ebada3", "#f4d2cd", "#fbecea"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Space Grotesk",
+        "purpose": "Wordmark and every heading (h1, h2, home hero). The one heading face in the app; never used for labels, buttons, or body copy."
+      },
+      "ui": {
+        "displayName": "IBM Plex Sans",
+        "purpose": "Body copy, labels, buttons, nav, list descriptions. Default document font."
+      },
+      "mono": {
+        "displayName": "JetBrains Mono",
+        "purpose": "Every textarea/input that holds or produces tool data (JSON, Base64, hashes, UUIDs, timestamps), plus the small route tag on each home row. Content in a code face, not a technical costume."
+      }
+    },
+    "shadows": [
+      {
+        "name": "header-separation",
+        "value": "0 2px 8px -4px rgba(15, 23, 42, 0.1)",
+        "purpose": "Sticky app-shell header lift off the page; the hairline border alone is too close in value to the page background on a light surface."
+      },
+      {
+        "name": "row-raised",
+        "value": "0 1px 3px rgba(15, 23, 42, 0.08)",
+        "purpose": "Home tool-row hover/focus-visible, paired with the background shift to white — the row reads as lifting off the page."
+      },
+      {
+        "name": "panel-raised",
+        "value": "0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px -8px rgba(15, 23, 42, 0.08)",
+        "purpose": "The .tool-panel card that holds each tool's controls."
+      }
+    ],
+    "motion": [
+      {
+        "name": "row-hover",
+        "value": "background-color 160ms ease-out, box-shadow 160ms ease-out",
+        "purpose": "Home tool-row hover/focus-visible, paired with the chevron fade/slide (opacity + transform, 160ms ease-out)."
+      },
+      {
+        "name": "button-hover",
+        "value": "background-color 150ms ease-out, transform 150ms ease-out",
+        "purpose": "Primary button hover/active: fill brightens and lifts 1px (translateY(-1px))."
+      },
+      {
+        "name": "field-focus",
+        "value": "border-color 120ms ease-out",
+        "purpose": "Textarea/input/select focus; the focus-visible outline itself appears instantly, only the border color eases."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one button style in the app (Format / Run / Generate / Hash / Convert / Transform). Filled, self-contained contrast, disabled state at 45% opacity.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Format</button>",
+      "css": ".ds-btn-primary { background: var(--accent); color: var(--accent-ink); border: none; border-radius: var(--radius-sm); padding: var(--space-2) var(--space-6); font-family: var(--font-ui); font-size: var(--text-sm); font-weight: 600; cursor: pointer; transition: background-color 150ms ease-out, transform 150ms ease-out; } .ds-btn-primary:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }"
+    },
+    {
+      "name": "Data Textarea",
+      "kind": "input",
+      "refersTo": "textarea-mono",
+      "description": "Every tool's input/output field. Recessed well (--bg fill) inside the white .tool-panel, monospace for the data it holds.",
+      "html": "<textarea class=\"ds-textarea\" rows=\"4\" aria-label=\"Example input\" placeholder=\"Paste here\"></textarea>",
+      "css": ".ds-textarea { width: 100%; background: var(--bg); color: var(--text-primary); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: var(--space-3); font-family: var(--font-mono); font-size: var(--text-sm); transition: border-color 120ms ease-out; } .ds-textarea:focus-visible { border-color: var(--accent-strong); outline: 2px solid var(--focus-ring); outline-offset: 2px; }"
+    },
+    {
+      "name": "Home Tool Row",
+      "kind": "nav",
+      "refersTo": "tool-row-link",
+      "description": "Full-width linked row on the home tool list. No card, no border-left accent; hover/focus raises the row to white with a soft shadow and reveals an authored chevron.",
+      "html": "<a class=\"ds-tool-row\" href=\"#\"><span class=\"ds-tool-row__body\"><span class=\"ds-tool-row__title\">JSON formatter</span><span class=\"ds-tool-row__description\">Pretty-print or minify JSON in your browser.</span></span><span class=\"ds-tool-row__path\">/tools/json-formatter</span><svg class=\"ds-tool-row__chevron\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M6 3.5L11 8l-5 4.5\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></a>",
+      "css": ".ds-tool-row { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-4) var(--space-3); text-decoration: none; border-radius: var(--radius-sm); color: inherit; transition: background-color 160ms ease-out, box-shadow 160ms ease-out; } .ds-tool-row__title { display: block; font-family: var(--font-display); font-size: var(--text-md); font-weight: 600; letter-spacing: -0.02em; color: var(--text-primary); } .ds-tool-row__description { display: block; font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-1); } .ds-tool-row__path { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-tertiary); } .ds-tool-row__chevron { color: var(--accent-strong); opacity: 0; transform: translateX(-2px); transition: opacity 160ms ease-out, transform 160ms ease-out; } .ds-tool-row:hover, .ds-tool-row:focus-visible { background-color: var(--surface); box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08); } .ds-tool-row:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; } .ds-tool-row:hover .ds-tool-row__chevron, .ds-tool-row:focus-visible .ds-tool-row__chevron { opacity: 1; transform: translateX(0); }"
+    },
+    {
+      "name": "Tool Panel",
+      "kind": "card",
+      "refersTo": "tool-panel",
+      "description": "The raised white container that holds each tool's own controls, on the tool page.",
+      "html": "<div class=\"ds-tool-panel\"><p>Tool controls render here.</p></div>",
+      "css": ".ds-tool-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-6); box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px -8px rgba(15, 23, 42, 0.08); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Daylight Workshop",
+    "overview": "GJB Toolbox is a small bench of hand tools you reach for mid-task, not a SaaS product with a home screen to check daily. The world is a workshop bench in daylight: light, cool steel-and-paper surfaces (brushed-aluminum grey, not cream), a warm brass/copper accent standing in for the metal fittings and hand tools themselves, and a soft two-tone gradient — warm light from one corner, cool shadow from the other — rather than a flat white void or a decorative pattern. Data (JSON, hashes, UUIDs, timestamps) is set in a real code/measurement face because it is code and data, not because monospace reads as technical.",
+    "keyCharacteristics": [
+      "Light steel-and-paper surfaces, not cream, not a flat white void",
+      "One brass/copper accent, used only for primary actions, hover/current state, and focus",
+      "Two surfaces only (page grey, raised white) reused everywhere instead of a multi-step scale",
+      "One authored SVG chevron as the app's entire icon vocabulary, no unicode glyphs",
+      "Exactly three intentional micro-interactions; everything else is instant or static"
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "The brass accent is reserved for primary actions, current/hover state, and focus. It never decorates static content.",
+        "section": "colors"
+      },
+      {
+        "name": "The Authored Icon Rule",
+        "body": "Icons are hand-drawn single-stroke SVG in one consistent vocabulary. No unicode arrows, no emoji, standing in for an icon.",
+        "section": "components"
+      },
+      {
+        "name": "The No-Toggle Rule",
+        "body": "One committed light system, applied everywhere. No dark/light toggle and no persisted theme preference — this app keeps zero client persistence by design.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three-Motion Rule",
+        "body": "Row hover, button hover, and field focus are the only transitions in the system. No page-load choreography, no decorative motion.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do reuse the two surfaces (--bg, --surface) instead of inventing a third grey.",
+      "Do set data-bearing textarea/input content in the mono face; it is content, not decoration.",
+      "Do give every interactive control a positive, visible focus-visible outline (2-3px offset, never inside the control)."
+    ],
+    "donts": [
+      "Don't use purple/indigo tints, cream-paper + terracotta serif warmth, or a flat white void.",
+      "Don't add glowing neon edges or halos — shadows carry an offset and a soft blur, never a zero-offset colored glow.",
+      "Don't reach for a unicode glyph (arrows, braces, emoji) as a stand-in icon.",
+      "Don't add a card-grid homepage, a kicker/eyebrow label, or a colored border-left accent.",
+      "Don't add client-side persistence (localStorage, sessionStorage, IndexedDB) for theme or any other preference."
+    ]
+  }
+}

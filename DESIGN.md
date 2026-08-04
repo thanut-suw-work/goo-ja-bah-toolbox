@@ -190,8 +190,15 @@ just gets the `--danger` treatment.
   `--border` divider between them, no border-left accent. Hover/focus-visible:
   background → `--surface` (white, "raised" off the grey page) with a
   soft `0 1px 3px` shadow, and an authored single-stroke SVG chevron
-  (currently hidden, `opacity:0`) fades in and shifts right 2px — this is
-  the one "icon," hand-drawn inline SVG, not a unicode glyph.
+  (currently hidden, `opacity:0`) fades in and shifts right 2px. Focus-visible
+  uses a positive `outline-offset` (2px, outside the row) like every other
+  control in this system — an earlier draft used a negative offset to keep
+  the outline inside the row bounds, which is the one focus treatment in the
+  app that read differently from the rest; fixed to match.
+- The back-link chevron (below, **Layout**) mirrors this same authored
+  SVG — one hand-drawn icon vocabulary, used left-pointing for "back" and
+  right-pointing for "forward into a tool," never a unicode arrow glyph
+  (`←`/`→`) or emoji standing in for either.
 - **Trust pills** (home, under the tagline): white chips with hairline
   `--border-strong` borders, `--text-secondary` text, no icons, no color
   coding — they state facts, they don't need to look like achievements.
@@ -224,8 +231,9 @@ there.
   trust-pill row) with generous top/bottom space, then a hairline divider,
   then the tool list as full-width rows (title + description + mono route
   tag), each a single `<Link>` — no cards, no grid.
-- **Tool page** (`ToolLayout`): small muted "← GJB Toolbox" back-link, `h1`
-  title, `--text-secondary` description, hairline divider, then a
+- **Tool page** (`ToolLayout`): small muted back-link (authored left-pointing
+  SVG chevron + "GJB Toolbox", not a `←` glyph), `h1` title,
+  `--text-secondary` description, hairline divider, then a
   `--surface` (white) `.tool-panel` (border, soft shadow, `--radius-md`,
   padding) that contains the tool's own markup unmodified — this is where
   the per-tool form controls above apply automatically via descendant
@@ -278,3 +286,20 @@ changed to light-appropriate values with contrast re-verified — and leaves
 mode, direction thesis, fonts, layout, component structure, and motion
 budget untouched. See the **Direction** section's revision note for the
 reasoning.
+
+**Revision (design-review polish pass):** a follow-up review flagged three
+items, all fixed without changing direction: the app-shell brand carried a
+decorative `{ }` unicode glyph before the wordmark, which is exactly the
+"unicode glyph standing in for an icon" pattern this file already refused
+elsewhere — removed, wordmark text only. The tool-page back-link used a
+literal `←` character for the same reason — replaced with the same
+hand-drawn single-stroke SVG chevron already established on the home rows
+(mirrored left-pointing), so the app now has one icon vocabulary instead of
+a glyph exception. The home tool-row focus-visible outline used a negative
+`outline-offset` (inside the row) while every other focus ring in the
+system uses a positive one (outside the control) — corrected to match. This
+project's `.impeccable/design.json` sidecar was also written alongside this
+pass, extending (not duplicating) the tokens above with tonal ramps, the
+shadow/motion vocabulary, breakpoints, and a handful of canonical component
+snippets for the live panel; regenerate it (`/impeccable document`,
+sidecar-only) if the tokens above change again.

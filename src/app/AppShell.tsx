@@ -6,9 +6,6 @@ export function AppShell() {
       <header className="app-shell__header">
         <div className="app-shell__header-inner">
           <Link to="/" className="brand">
-            <span className="brand__mark" aria-hidden="true">
-              {'{ }'}
-            </span>
             <span className="brand__word">GJB Toolbox</span>
           </Link>
         </div>
