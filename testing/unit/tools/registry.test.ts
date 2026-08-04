@@ -18,4 +18,8 @@ describe('registry', () => {
   it('includes base64', () => {
     expect(tools.some((t) => t.id === 'base64')).toBe(true)
   })
+
+  it('includes uuid', () => {
+    expect(tools.some((t) => t.id === 'uuid')).toBe(true)
+  })
 })

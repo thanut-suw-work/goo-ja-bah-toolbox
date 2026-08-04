@@ -14,6 +14,12 @@ export const tools: ToolDefinition[] = [
     description: 'Encode or decode UTF-8 text as Base64 in your browser.',
     component: lazy(() => import('./base64/Base64Tool')),
   },
+  {
+    id: 'uuid',
+    title: 'UUID',
+    description: 'Generate random UUID v4 identifiers in your browser.',
+    component: lazy(() => import('./uuid/UuidTool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {
