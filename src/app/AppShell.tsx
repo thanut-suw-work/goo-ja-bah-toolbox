@@ -1,4 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
+import { Toaster } from '@/components/ui/sonner'
 
 export function AppShell() {
   return (
@@ -13,6 +14,7 @@ export function AppShell() {
       <main className="app-shell__main">
         <Outlet />
       </main>
+      <Toaster position="bottom-right" />
     </div>
   )
 }
