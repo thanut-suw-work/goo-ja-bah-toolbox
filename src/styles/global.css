@@ -1,26 +1,25 @@
 /* GJB Toolbox — Operate-mode visual system. See DESIGN.md for rationale. */
 
 :root {
-  --ink-950: #0a0c10;
-  --ink-900: #12151b;
-  --ink-800: #171b23;
-  --ink-700: #1e232d;
-  --ink-600: #2a303c;
+  --bg: #f2f3f6;
+  --surface: #ffffff;
 
-  --line: rgba(238, 241, 246, 0.09);
-  --line-strong: rgba(238, 241, 246, 0.16);
+  --border: rgba(15, 23, 42, 0.12);
+  --border-strong: rgba(15, 23, 42, 0.22);
 
-  --text-primary: #eef1f6;
-  --text-secondary: #a6adba;
-  --text-tertiary: #6d7482;
+  --text-primary: #14171d;
+  --text-secondary: #4b515c;
+  --text-tertiary: #6b7280;
 
   --accent: #d99a3f;
   --accent-hover: #e7ab55;
+  --accent-strong: #a35a17;
   --accent-ink: #241a08;
 
-  --danger: #d97462;
+  --danger: #b23a26;
+  --success: #2f7a4d;
 
-  --focus-ring: #e7ab55;
+  --focus-ring: var(--accent-strong);
 
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-ui: 'IBM Plex Sans', system-ui, sans-serif;
@@ -47,7 +46,7 @@
   --radius-sm: 6px;
   --radius-md: 12px;
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 *,
@@ -57,7 +56,7 @@
 }
 
 html {
-  background: var(--ink-950);
+  background: var(--bg);
 }
 
 body {
@@ -67,12 +66,18 @@ body {
   font-size: var(--text-base);
   line-height: 1.5;
   color: var(--text-primary);
-  background-color: var(--ink-950);
-  background-image: radial-gradient(
-    ellipse 900px 560px at 12% -10%,
-    rgba(217, 154, 63, 0.07),
-    transparent 60%
-  );
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(
+      ellipse 900px 560px at 8% -12%,
+      rgba(217, 154, 63, 0.12),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 900px 700px at 100% 110%,
+      rgba(75, 92, 115, 0.1),
+      transparent 60%
+    );
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
@@ -120,8 +125,9 @@ button {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: var(--ink-900);
-  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 8px -4px rgba(15, 23, 42, 0.1);
 }
 
 .app-shell__header-inner {
@@ -146,7 +152,7 @@ button {
 .brand__mark {
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  color: var(--accent);
+  color: var(--accent-strong);
 }
 
 .brand__word {
@@ -207,14 +213,15 @@ button {
 .trust-pills__item {
   font-size: var(--text-xs);
   color: var(--text-secondary);
-  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
   border-radius: 999px;
   padding: var(--space-1) var(--space-3);
 }
 
 .home-divider {
   border: none;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
   margin: 0 0 var(--space-4);
 }
 
@@ -222,11 +229,11 @@ button {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
 }
 
 .tool-row {
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 
 .tool-row__link {
@@ -236,12 +243,15 @@ button {
   padding: var(--space-4) var(--space-3);
   text-decoration: none;
   border-radius: var(--radius-sm);
-  transition: background-color 160ms ease-out;
+  transition:
+    background-color 160ms ease-out,
+    box-shadow 160ms ease-out;
 }
 
 .tool-row__link:hover,
 .tool-row__link:focus-visible {
-  background-color: var(--ink-700);
+  background-color: var(--surface);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
 .tool-row__link:focus-visible {
@@ -286,7 +296,7 @@ button {
 
 .tool-row__chevron {
   flex-shrink: 0;
-  color: var(--accent);
+  color: var(--accent-strong);
   opacity: 0;
   transform: translateX(-2px);
   transition:
@@ -316,7 +326,7 @@ button {
 
 .tool-page__back:hover,
 .tool-page__back:focus-visible {
-  color: var(--accent);
+  color: var(--accent-strong);
 }
 
 .tool-page__back:focus-visible {
@@ -346,16 +356,19 @@ button {
 /* ---------------------------------------------------------------------- */
 
 .tool-panel {
-  background: var(--ink-800);
-  border: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: var(--space-6);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 16px -8px rgba(15, 23, 42, 0.08);
 }
 
 .tool-panel > div > section + section {
   margin-top: var(--space-8);
   padding-top: var(--space-8);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
 }
 
 .tool-panel h2 {
@@ -380,9 +393,9 @@ button {
 .tool-panel input,
 .tool-panel select {
   width: 100%;
-  background: var(--ink-900);
+  background: var(--bg);
   color: var(--text-primary);
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
   padding: var(--space-3);
   font-size: var(--text-sm);
@@ -408,7 +421,7 @@ button {
 .tool-panel textarea:focus-visible,
 .tool-panel input:focus-visible,
 .tool-panel select:focus-visible {
-  border-color: var(--accent);
+  border-color: var(--accent-strong);
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
@@ -478,6 +491,6 @@ button {
 }
 
 .not-found a {
-  color: var(--accent);
+  color: var(--accent-strong);
   font-size: var(--text-sm);
 }
