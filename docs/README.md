@@ -21,12 +21,15 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | Spec | Topic |
 |------|--------|
 | `superpowers/specs/2026-08-05-gjb-toolbox-design.md` | Approved GJB Toolbox design (architecture, tools, privacy, testing, docs) |
+| `superpowers/specs/2026-08-05-tool-ui-prototype-light-design.md` | Light prototype-style tool UI + PDF wizard + home origin note |
+| `superpowers/specs/2026-08-05-home-origin-note-design.md` | Superseded (origin note folded into tool-ui spec) |
 
 ## Implementation plans
 
 | Plan | Topic |
 |------|--------|
 | `superpowers/plans/2026-08-05-gjb-toolbox.md` | MVP implementation plan (scaffold → tools → e2e → Impeccable) |
+| `superpowers/plans/2026-08-05-tool-ui-prototype-light.md` | Tool UI restyle + PDF wizard + origin note |
 
 ## Feature docs
 

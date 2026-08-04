@@ -1,7 +1,7 @@
 # GJB Toolbox — home origin note (copy-only)
 
 Date: 2026-08-05  
-Status: approved for planning
+Status: **superseded** by `2026-08-05-tool-ui-prototype-light-design.md` (home origin note retained there; tool UI scope expanded)
 
 ## Goal
 
