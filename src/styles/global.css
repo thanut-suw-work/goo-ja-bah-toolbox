@@ -255,29 +255,18 @@ button {
 .home-hero__origin {
   font-size: var(--text-sm);
   color: var(--text-tertiary);
-  max-width: 62ch;
-  margin: var(--space-4) 0 0;
-}
-
-.home-divider {
-  border: none;
-  border-top: 1px solid var(--line);
-  margin: 0 0 var(--space-4);
+  margin: var(--space-4) 0 var(--space-4);
+  white-space: nowrap;
 }
 
 .tool-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--line);
 }
 
 .tool-row {
   border-bottom: 1px solid var(--line);
-}
-
-.tool-row:last-child {
-  border-bottom: none;
 }
 
 .tool-row__link {

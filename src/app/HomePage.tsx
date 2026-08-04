@@ -23,7 +23,6 @@ export function HomePage() {
           I built this after getting stuck on apps that only accept tax invoices as images — I had a PDF...
         </p>
       </div>
-      <hr className="home-divider" />
       <ul className="tool-list">
         {tools.map((t) => (
           <li key={t.id} className="tool-row">
