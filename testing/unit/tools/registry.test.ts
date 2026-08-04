@@ -11,27 +11,16 @@ describe('registry', () => {
     expect(getToolById('nope')).toBeUndefined()
   })
 
-  it('includes json-formatter', () => {
-    expect(tools.some((t) => t.id === 'json-formatter')).toBe(true)
-  })
-
-  it('includes base64', () => {
-    expect(tools.some((t) => t.id === 'base64')).toBe(true)
-  })
-
-  it('includes uuid', () => {
-    expect(tools.some((t) => t.id === 'uuid')).toBe(true)
-  })
-
-  it('includes hash-sha256', () => {
-    expect(tools.some((t) => t.id === 'hash-sha256')).toBe(true)
-  })
-
-  it('includes unix-timestamp', () => {
-    expect(tools.some((t) => t.id === 'unix-timestamp')).toBe(true)
-  })
-
-  it('includes text-case', () => {
-    expect(tools.some((t) => t.id === 'text-case')).toBe(true)
+  it('exposes exactly the expected seven tools', () => {
+    const expected = [
+      'json-formatter',
+      'base64',
+      'uuid',
+      'hash-sha256',
+      'unix-timestamp',
+      'text-case',
+      'pdf-to-image',
+    ]
+    expect(tools.map((t) => t.id).sort()).toEqual([...expected].sort())
   })
 })
