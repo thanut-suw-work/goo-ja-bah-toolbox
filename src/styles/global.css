@@ -1,8 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm pale-yellow light — eye comfort; brass primary */
+    --background: 42 35% 96%; /* ~#f7f5ed */
+    --foreground: 30 12% 12%;
+    --card: 42 40% 99%;
+    --card-foreground: 30 12% 12%;
+    --popover: 42 40% 99%;
+    --popover-foreground: 30 12% 12%;
+    --primary: 36 66% 55%; /* brass fill */
+    --primary-foreground: 40 55% 9%; /* accent-ink */
+    --secondary: 42 25% 93%;
+    --secondary-foreground: 30 12% 12%;
+    --muted: 42 25% 93%;
+    --muted-foreground: 30 8% 38%;
+    --accent: 42 25% 93%;
+    --accent-foreground: 30 12% 12%;
+    --destructive: 8 65% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 18% 84%;
+    --input: 40 18% 84%;
+    --ring: 28 75% 36%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+}
+
 /* GJB Toolbox — Operate-mode visual system. See DESIGN.md for rationale. */
 
 :root {
-  --bg: #f2f3f6;
-  --surface: #ffffff;
+  --bg: #f7f5ed;
+  --surface: #fffcf5;
 
   --border: rgba(15, 23, 42, 0.12);
   --border-strong: rgba(15, 23, 42, 0.22);
