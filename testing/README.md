@@ -30,6 +30,6 @@ testing/
 npm test              # run once
 npm run test:watch    # watch mode
 
-# e2e
-npx playwright test
+# e2e (build + preview via playwright.config webServer)
+npm run test:e2e
 ```
