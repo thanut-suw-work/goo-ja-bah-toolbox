@@ -23,6 +23,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/specs/2026-08-05-gjb-toolbox-design.md` | Approved GJB Toolbox design (architecture, tools, privacy, testing, docs) |
 | `superpowers/specs/2026-08-05-tool-ui-prototype-light-design.md` | Light prototype-style tool UI + PDF wizard + home origin note |
 | `superpowers/specs/2026-08-05-home-origin-note-design.md` | Superseded (origin note folded into tool-ui spec) |
+| `superpowers/specs/2026-08-05-github-pages-deploy-design.md` | GitHub Pages via Actions (project path, Vitest gate, SPA 404) |
 
 ## Implementation plans
 
