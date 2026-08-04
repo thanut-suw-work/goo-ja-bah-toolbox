@@ -41,6 +41,14 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
 
 Implemented in `src/tools/pdf-to-image/convert.ts`. No separate Vite plugin required.
 
+## UI
+
+3-step wizard in `PdfToImageTool.tsx` (`step: 1 | 2 | 3` state). A step indicator (three pills, current step emphasized) sits above the active card; steps are not independently clickable.
+
+1. **Upload** — dashed dropzone-style card with a file input (`accept="application/pdf"`); shows filename + page count once parsed; **Next** stays disabled until `pageCount !== null`; parse errors shown inline (`role="alert"`)
+2. **Range** — From / To number inputs + Format select (PNG | JPG); **Back** returns to step 1; **Convert** runs the existing conversion pipeline and only advances to step 3 on success (disabled + "Converting…" while busy); validation/render errors shown inline (`role="alert"`)
+3. **Download** — confirms the download started (single file vs `pages.zip`); **Convert another** resets `file`/`pageCount`/`from`/`to`/`error`/`step` and clears the file input
+
 ## Privacy
 
 See `docs/privacy.md`. No server conversion.
