@@ -1,10 +1,483 @@
+/* GJB Toolbox — Operate-mode visual system. See DESIGN.md for rationale. */
+
+:root {
+  --ink-950: #0a0c10;
+  --ink-900: #12151b;
+  --ink-800: #171b23;
+  --ink-700: #1e232d;
+  --ink-600: #2a303c;
+
+  --line: rgba(238, 241, 246, 0.09);
+  --line-strong: rgba(238, 241, 246, 0.16);
+
+  --text-primary: #eef1f6;
+  --text-secondary: #a6adba;
+  --text-tertiary: #6d7482;
+
+  --accent: #d99a3f;
+  --accent-hover: #e7ab55;
+  --accent-ink: #241a08;
+
+  --danger: #d97462;
+
+  --focus-ring: #e7ab55;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-ui: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.5rem;
+  --text-hero-mobile: 2.5rem;
+  --text-hero: 4rem;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+
+  color-scheme: dark;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html {
+  background: var(--ink-950);
+}
+
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  min-height: 100vh;
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--ink-950);
+  background-image: radial-gradient(
+    ellipse 900px 560px at 12% -10%,
+    rgba(217, 154, 63, 0.07),
+    transparent 60%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* App shell                                                              */
+/* ---------------------------------------------------------------------- */
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell__header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--ink-900);
+  border-bottom: 1px solid var(--line);
+}
+
+.app-shell__header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+}
+
+.brand:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.brand__mark {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--accent);
+}
+
+.brand__word {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.app-shell__main {
+  flex: 1;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) var(--space-24);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Home                                                                   */
+/* ---------------------------------------------------------------------- */
+
+.home-hero {
+  padding-block: var(--space-8) var(--space-12);
+}
+
+.home-hero__brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: var(--text-hero-mobile);
+  line-height: 1.05;
+  margin: 0 0 var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .home-hero__brand {
+    font-size: var(--text-hero);
+  }
+}
+
+.home-hero__tagline {
+  font-size: var(--text-md);
+  color: var(--text-secondary);
+  max-width: 62ch;
+  margin: 0 0 var(--space-6);
+}
+
+.trust-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.trust-pills__item {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-3);
+}
+
+.home-divider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0 0 var(--space-4);
+}
+
+.tool-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.tool-row {
+  border-bottom: 1px solid var(--line);
+}
+
+.tool-row__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-3);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background-color 160ms ease-out;
+}
+
+.tool-row__link:hover,
+.tool-row__link:focus-visible {
+  background-color: var(--ink-700);
+}
+
+.tool-row__link:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.tool-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.tool-row__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.tool-row__description {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-top: var(--space-1);
+}
+
+.tool-row__path {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .tool-row__path {
+    display: inline;
+  }
+}
+
+.tool-row__chevron {
+  flex-shrink: 0;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-2px);
+  transition:
+    opacity 160ms ease-out,
+    transform 160ms ease-out;
+}
+
+.tool-row__link:hover .tool-row__chevron,
+.tool-row__link:focus-visible .tool-row__chevron {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tool page chrome                                                       */
+/* ---------------------------------------------------------------------- */
+
+.tool-page__back {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  text-decoration: none;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-sm);
+}
+
+.tool-page__back:hover,
+.tool-page__back:focus-visible {
+  color: var(--accent);
+}
+
+.tool-page__back:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.tool-page__header {
+  margin-bottom: var(--space-6);
+}
+
+.tool-page__title {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+}
+
+.tool-page__description {
+  font-size: var(--text-md);
+  color: var(--text-secondary);
+  max-width: 62ch;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Shared tool-panel form vocabulary                                      */
+/* Applies to every tool's markup via descendant selectors, so individual */
+/* tool components need no per-file styling.                              */
+/* ---------------------------------------------------------------------- */
+
+.tool-panel {
+  background: var(--ink-800);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+}
+
+.tool-panel > div > section + section {
+  margin-top: var(--space-8);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--line);
+}
+
+.tool-panel h2 {
+  font-size: var(--text-md);
+  margin-bottom: var(--space-3);
+}
+
+.tool-panel label {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.tool-panel label > select,
+.tool-panel label > input {
+  display: block;
+  margin-top: var(--space-2);
+}
+
+.tool-panel textarea,
+.tool-panel input,
+.tool-panel select {
+  width: 100%;
+  background: var(--ink-900);
+  color: var(--text-primary);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-size: var(--text-sm);
+  transition: border-color 120ms ease-out;
+}
+
+.tool-panel textarea,
+.tool-panel input[type='text'],
+.tool-panel input[type='number'] {
+  font-family: var(--font-mono);
+}
+
+.tool-panel select {
+  font-family: var(--font-ui);
+  width: auto;
+}
+
+.tool-panel input[readonly],
+.tool-panel textarea[readonly] {
+  color: var(--text-secondary);
+}
+
+.tool-panel textarea:focus-visible,
+.tool-panel input:focus-visible,
+.tool-panel select:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.tool-panel input[type='file'] {
+  padding: var(--space-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+.tool-panel button {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-6);
+  margin: var(--space-3) 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease-out,
+    transform 150ms ease-out;
+}
+
+.tool-panel button:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.tool-panel button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.tool-panel button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.tool-panel p[role='alert'] {
+  color: var(--danger);
+  font-size: var(--text-sm);
+  margin: var(--space-2) 0;
+}
+
+.tool-panel > div > p {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-3);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Not found                                                              */
+/* ---------------------------------------------------------------------- */
+
+.not-found {
+  text-align: center;
+  padding-block: var(--space-24);
+}
+
+.not-found h1 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+}
+
+.not-found a {
+  color: var(--accent);
+  font-size: var(--text-sm);
 }

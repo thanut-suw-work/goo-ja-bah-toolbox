@@ -2,13 +2,18 @@ import { Link, Outlet } from 'react-router-dom'
 
 export function AppShell() {
   return (
-    <div>
-      <header>
-        <Link to="/">
-          <strong>GJB Toolbox</strong>
-        </Link>
+    <div className="app-shell">
+      <header className="app-shell__header">
+        <div className="app-shell__header-inner">
+          <Link to="/" className="brand">
+            <span className="brand__mark" aria-hidden="true">
+              {'{ }'}
+            </span>
+            <span className="brand__word">GJB Toolbox</span>
+          </Link>
+        </div>
       </header>
-      <main>
+      <main className="app-shell__main">
         <Outlet />
       </main>
     </div>
