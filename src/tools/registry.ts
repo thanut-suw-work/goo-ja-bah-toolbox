@@ -32,6 +32,12 @@ export const tools: ToolDefinition[] = [
     description: 'Convert Unix seconds and ISO UTC date/time in your browser.',
     component: lazy(() => import('./unix-timestamp/UnixTimestampTool')),
   },
+  {
+    id: 'text-case',
+    title: 'Text case',
+    description: 'Convert text between lower, upper, title, camel, and snake case.',
+    component: lazy(() => import('./text-case/TextCaseTool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {

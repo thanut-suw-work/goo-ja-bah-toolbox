@@ -30,4 +30,8 @@ describe('registry', () => {
   it('includes unix-timestamp', () => {
     expect(tools.some((t) => t.id === 'unix-timestamp')).toBe(true)
   })
+
+  it('includes text-case', () => {
+    expect(tools.some((t) => t.id === 'text-case')).toBe(true)
+  })
 })
