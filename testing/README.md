@@ -23,11 +23,12 @@ testing/
 - Non-trivial user flows → e2e under `testing/e2e/`
 - A feature is not done without tests for its logic (and e2e when the flow is the point)
 
-## Commands (fill in after scaffold)
+## Commands
 
 ```bash
 # unit
-npm test          # or: npx vitest
+npm test              # run once
+npm run test:watch    # watch mode
 
 # e2e
 npx playwright test
