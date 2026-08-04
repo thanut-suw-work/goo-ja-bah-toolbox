@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Restyle all tool pages to light `ui-prototype` chrome (Tailwind + minimal shadcn), add a 3-step PDF wizard UI, and add the home origin note — without dark mode or theme persistence.
+**Goal:** Restyle all tool pages to light `ui-prototype` chrome (Tailwind + minimal shadcn), add a 3-step PDF wizard UI, and add the home origin note — warm pale-yellow light theme for eye comfort; no dark mode or theme persistence.
 
-**Architecture:** Keep AppShell + registry + lazy PDF. Add Tailwind light tokens (brass-mapped primary). Shared `ToolLayout` + shadcn primitives. Text tools get dual-pane cards; PDF gets local step state over existing convert/range logic.
+**Architecture:** Keep AppShell + registry + lazy PDF. Add Tailwind light tokens (warm yellow paper tint + brass primary). Shared `ToolLayout` + shadcn primitives. Text tools get dual-pane cards; PDF gets local step state over existing convert/range logic.
 
 **Tech Stack:** React 19 · Vite · TypeScript · Tailwind 3 · CVA/clsx/tailwind-merge · lucide-react · sonner · Radix Slot (button) · existing pdfjs/jszip
 
@@ -167,26 +167,26 @@ At the **top** of `global.css` (keep existing `@fontsource` imports and home/too
 
 @layer base {
   :root {
-    /* Light only — brass primary from DESIGN.md #d99a3f / ink #241a08 */
-    --background: 220 14% 96%; /* #f2f3f6 */
-    --foreground: 220 16% 10%; /* #14171d */
-    --card: 0 0% 100%;
-    --card-foreground: 220 16% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 16% 10%;
+    /* Warm pale-yellow light — eye comfort; brass primary */
+    --background: 42 35% 96%; /* ~#f7f5ed */
+    --foreground: 30 12% 12%;
+    --card: 42 40% 99%;
+    --card-foreground: 30 12% 12%;
+    --popover: 42 40% 99%;
+    --popover-foreground: 30 12% 12%;
     --primary: 36 66% 55%; /* brass fill */
     --primary-foreground: 40 55% 9%; /* accent-ink */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 16% 10%;
-    --muted: 220 14% 96%;
-    --muted-foreground: 215 10% 40%;
-    --accent: 220 14% 96%;
-    --accent-foreground: 220 16% 10%;
-    --destructive: 8 65% 42%; /* #b23a26-ish */
+    --secondary: 42 25% 93%;
+    --secondary-foreground: 30 12% 12%;
+    --muted: 42 25% 93%;
+    --muted-foreground: 30 8% 38%;
+    --accent: 42 25% 93%;
+    --accent-foreground: 30 12% 12%;
+    --destructive: 8 65% 42%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 13% 85%;
-    --input: 220 13% 85%;
-    --ring: 28 75% 36%; /* accent-strong */
+    --border: 40 18% 84%;
+    --input: 40 18% 84%;
+    --ring: 28 75% 36%;
     --radius: 0.5rem;
   }
 
@@ -196,7 +196,7 @@ At the **top** of `global.css` (keep existing `@fontsource` imports and home/too
 }
 ```
 
-Keep existing custom properties (`--bg`, `--surface`, home hero, tool-list) so home still works until optionally migrated later. Map `body` background to either `bg-background` via Tailwind on shell or keep `.app-shell` using `--bg`.
+Also retarget legacy `--bg` / `--surface` in the same file to the warm paper values so home list matches tools (e.g. `--bg: #f7f5ed; --surface: #fffcf5;`).
 
 - [ ] **Step 5: Ensure CSS loads**
 
@@ -724,5 +724,6 @@ EOF
 
 - No TBD steps
 - Button name **Format** preserved for JSON e2e
-- Brass HSL primary used consistently in Task 1 tokens
+- Brass HSL primary + warm yellow `--background` 42 35% 96% used consistently in Task 1 tokens
 - PDF steps 1\|2\|3 match spec wizard
+- Cool steel `#f2f3f6` replaced by warm paper (not cream+terracotta brochure look)

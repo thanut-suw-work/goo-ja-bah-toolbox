@@ -14,7 +14,7 @@ Keep the live home shell (header + list). Add home origin note. Restyle every to
 | Topic | Choice |
 |-------|--------|
 | Home shell | Sticky header + hero + full-width tool rows (not prototype sidebar/cards) |
-| Theme | Light only; no ModeToggle; no `localStorage` / `sessionStorage` for theme |
+| Theme | Light only, **warm pale-yellow paper tint** (eye comfort); no ModeToggle; no theme storage |
 | Tool chrome approach | Lift Tailwind + minimal shadcn pieces from `ui-prototype/` into live app |
 | PDF layout | 3-step wizard: Upload → Range/format → Download |
 | Origin note | Under trust pills, quieter than tagline |
@@ -32,6 +32,31 @@ Keep the live home shell (header + list). Add home origin note. Restyle every to
 
 > I built this after getting stuck on apps that only accept tax invoices as images — I had a PDF.
 
+## Light palette (warm yellow tint)
+
+Eye-comfort light — soft warm paper, not cool steel grey and not cream+terracotta brochure:
+
+```css
+/* Page / app background — pale warm yellow-grey */
+--background: 42 35% 96%;   /* ~#f7f5ed */
+--foreground: 30 12% 12%;
+
+/* Raised cards/header — slightly warmer white */
+--card: 42 40% 99%;
+--card-foreground: 30 12% 12%;
+
+/* Brass primary unchanged in spirit */
+--primary: 36 66% 55%;      /* #d99a3f family */
+--primary-foreground: 40 55% 9%;
+
+--muted: 42 25% 93%;
+--muted-foreground: 30 8% 38%;
+--border: 40 18% 84%;
+--ring: 28 75% 36%;
+```
+
+Also retarget legacy workshop tokens (`--bg`, `--surface`, home list) to the same warm base so home and tools match. Still refuse purple/indigo, neon glow, and dark mode.
+
 ## Stack (minimal lift)
 
 Add to live app (not the entire prototype dependency bag):
@@ -48,8 +73,8 @@ Do **not** add: `next-themes`, ModeToggle, theme `storageKey`, unused Radix pack
 - Routes, registry, lazy PDF chunk, privacy constraints: unchanged
 - `AppShell`: sticky brand header; mount `<Toaster />` (sonner); no sidebar
 - `ToolLayout`: back link → title (+ optional Lucide icon) → description → children
-- Existing `src/styles/global.css` workshop tokens: either map into Tailwind CSS variables for light theme, or coexist (prefer mapping primary/accent so one system drives buttons/cards)
-- Revise `DESIGN.md` to record light shadcn-style **tool** chrome while home remains list-based Operate surface
+- Existing `src/styles/global.css` workshop tokens: map into Tailwind CSS variables using the **warm yellow** light palette above
+- Revise `DESIGN.md` to record warm-light shadcn-style **tool** chrome while home remains list-based Operate surface
 
 ## Per-tool layouts
 
