@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { getToolById } from '@/tools/registry'
 import { ToolLayout } from '@/tools/shared/ToolLayout'
 import { NotFoundPage } from './NotFoundPage'
+import { ToolErrorBoundary } from './ToolErrorBoundary'
 
 export function ToolPage() {
   const { id } = useParams()
@@ -12,9 +13,11 @@ export function ToolPage() {
   const Comp = tool.component
   return (
     <ToolLayout title={tool.title} description={tool.description}>
-      <Suspense fallback={<p>Loading…</p>}>
-        <Comp />
-      </Suspense>
+      <ToolErrorBoundary>
+        <Suspense fallback={<p>Loading…</p>}>
+          <Comp />
+        </Suspense>
+      </ToolErrorBoundary>
     </ToolLayout>
   )
 }

@@ -475,6 +475,50 @@ button {
   margin-bottom: var(--space-3);
 }
 
+.tool-load-error {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.tool-load-error__message {
+  color: var(--danger);
+  font-size: var(--text-md);
+  font-weight: 600;
+  margin-bottom: var(--space-4);
+}
+
+.tool-load-error__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.tool-load-error__actions button {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-6);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease-out,
+    transform 150ms ease-out;
+}
+
+.tool-load-error__actions button:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.tool-load-error__actions button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
 /* ---------------------------------------------------------------------- */
 /* Not found                                                              */
 /* ---------------------------------------------------------------------- */
