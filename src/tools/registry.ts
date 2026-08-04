@@ -26,6 +26,12 @@ export const tools: ToolDefinition[] = [
     description: 'Compute SHA-256 hex digests in your browser.',
     component: lazy(() => import('./hash-sha256/HashSha256Tool')),
   },
+  {
+    id: 'unix-timestamp',
+    title: 'Unix timestamp',
+    description: 'Convert Unix seconds and ISO UTC date/time in your browser.',
+    component: lazy(() => import('./unix-timestamp/UnixTimestampTool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {

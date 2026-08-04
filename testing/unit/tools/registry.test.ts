@@ -26,4 +26,8 @@ describe('registry', () => {
   it('includes hash-sha256', () => {
     expect(tools.some((t) => t.id === 'hash-sha256')).toBe(true)
   })
+
+  it('includes unix-timestamp', () => {
+    expect(tools.some((t) => t.id === 'unix-timestamp')).toBe(true)
+  })
 })
