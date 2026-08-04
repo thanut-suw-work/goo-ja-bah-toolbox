@@ -20,6 +20,12 @@ export const tools: ToolDefinition[] = [
     description: 'Generate random UUID v4 identifiers in your browser.',
     component: lazy(() => import('./uuid/UuidTool')),
   },
+  {
+    id: 'hash-sha256',
+    title: 'SHA-256 hash',
+    description: 'Compute SHA-256 hex digests in your browser.',
+    component: lazy(() => import('./hash-sha256/HashSha256Tool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {

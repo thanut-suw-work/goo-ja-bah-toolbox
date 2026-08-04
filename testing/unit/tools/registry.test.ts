@@ -22,4 +22,8 @@ describe('registry', () => {
   it('includes uuid', () => {
     expect(tools.some((t) => t.id === 'uuid')).toBe(true)
   })
+
+  it('includes hash-sha256', () => {
+    expect(tools.some((t) => t.id === 'hash-sha256')).toBe(true)
+  })
 })
