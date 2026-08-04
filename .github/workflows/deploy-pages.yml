@@ -27,6 +27,7 @@ jobs:
       - run: npm test
 
   build:
+    if: github.ref == 'refs/heads/main'
     needs: test
     runs-on: ubuntu-latest
     env:
@@ -47,6 +48,7 @@ jobs:
           path: dist
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:
