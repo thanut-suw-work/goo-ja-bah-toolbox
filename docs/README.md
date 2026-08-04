@@ -31,6 +31,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 |------|--------|
 | `superpowers/plans/2026-08-05-gjb-toolbox.md` | MVP implementation plan (scaffold → tools → e2e → Impeccable) |
 | `superpowers/plans/2026-08-05-tool-ui-prototype-light.md` | Tool UI restyle + PDF wizard + origin note |
+| `superpowers/plans/2026-08-05-github-pages-deploy.md` | GitHub Pages via Actions (test gate, project base, SPA 404) |
 
 ## Feature docs
 
