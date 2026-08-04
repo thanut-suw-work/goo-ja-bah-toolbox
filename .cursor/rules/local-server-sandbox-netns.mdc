@@ -1,0 +1,47 @@
+---
+description: Gotcha — local servers for browser must not start in Cursor sandbox netns
+alwaysApply: true
+---
+
+# Local server ↔ browser: sandbox netns gotcha
+
+## Symptom
+
+Browser opens `http://localhost:<port>` → `ERR_CONNECTION_REFUSED` (-102). Agent still has `server-info` / alive PID.
+
+## Root cause
+
+Shell started server **inside Cursor sandbox**. Process listens in **sandbox network namespace**. Host browser uses **different netns** → refuse. Stale `server-info` lies.
+
+Proof:
+
+```bash
+readlink /proc/<pid>/ns/net   # server
+readlink /proc/self/ns/net    # host shell with required_permissions: ["all"]
+# mismatch = this bug
+ss -tlnp | grep <port>        # empty on host even if PID alive
+```
+
+## Required fix when starting browser-reachable servers
+
+1. Request `required_permissions: ["all"]` (not just network allowlist).
+2. Prefer persistent foreground process — detached `nohup` often gets **reaped** after tool shell exits.
+3. Brainstorm companion specifically:
+
+```bash
+# block_until_ms: 0 so shell stays alive; permissions: ["all"]
+.../brainstorming/scripts/start-server.sh --project-dir <project> --foreground
+```
+
+Then read URL from stdout / `state/server-info`. Verify with host-netns curl before telling user the URL.
+
+4. If old sandboxed PID left behind: kill it, restart as above. Do not reuse old port from dead/wrong-ns session.
+
+## Fast triage checklist
+
+1. `curl -m 2 http://127.0.0.1:<port>/` from host (`all` perms)
+2. `ss -tlnp | grep <port>`
+3. Compare `/proc/<pid>/ns/net` vs host
+4. Check `server-stopped` / process reaped (no graceful log)
+
+Mismatch netns or empty listen → restart outside sandbox, not "open URL again".
