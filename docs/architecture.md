@@ -55,7 +55,9 @@ Architecture forbids persistence layers and telemetry SDKs. See `privacy.md`.
 - URL: `https://thanut-suw-work.github.io/goo-ja-bah-toolbox/`
 - CI: `.github/workflows/deploy-pages.yml` — Vitest → Vite build → Pages
 - Build sets `VITE_BASE=/goo-ja-bah-toolbox/` so asset URLs include the project path
-- App uses `BrowserRouter` with `basename` from `routerBasename(import.meta.env.BASE_URL)`
+- App uses `BrowserRouter` with `basename` from `routerBasename(import.meta.env.BASE_URL)` (strips trailing `/` — Vite `BASE_URL` ends with `/`; React Router basename must not)
 - SPA deep links: CI copies `dist/index.html` → `dist/404.html` so Pages serves the shell for unknown paths
 - One-time repo setting: **Settings → Pages → Source = GitHub Actions**
 - Local default base remains `/` unless `VITE_BASE` is set
+- Paths in the Routing table are relative to the router basename (empty locally; `/goo-ja-bah-toolbox` on Pages)
+- Local project-base check: `VITE_BASE=/goo-ja-bah-toolbox/ npm run build && npm run preview -- --base /goo-ja-bah-toolbox/`
