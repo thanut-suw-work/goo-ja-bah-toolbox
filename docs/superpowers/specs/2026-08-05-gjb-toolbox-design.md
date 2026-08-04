@@ -142,4 +142,4 @@ testing/
 - Add react-router, Vitest, Playwright, pdfjs-dist  
 - Write feature docs before or with each tool  
 - Keep `.superpowers/` gitignored (brainstorm companion)  
-- Local browser-reachable servers: never start in Cursor sandbox netns (see `.cursor/rules/local-server-sandbox-netns.mdc`)
+- Local browser-reachable servers: never start in Cursor sandbox netns (user-level Cursor rule)

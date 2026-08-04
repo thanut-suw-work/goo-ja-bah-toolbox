@@ -34,4 +34,4 @@ React + Vite + TypeScript · react-router · Vitest · Playwright · pdf.js for 
 | `docs/privacy.md` | Privacy constraints |
 | `docs/features/` | Per-tool / subsystem specs |
 | `testing/README.md` | How to test |
-| `.cursor/rules/` | Project agent gotchas |
+| User-level Cursor rules | Cross-project agent gotchas (e.g. sandbox netns) |
