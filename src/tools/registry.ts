@@ -8,6 +8,12 @@ export const tools: ToolDefinition[] = [
     description: 'Pretty-print or minify JSON in your browser.',
     component: lazy(() => import('./json-formatter/JsonFormatterTool')),
   },
+  {
+    id: 'base64',
+    title: 'Base64',
+    description: 'Encode or decode UTF-8 text as Base64 in your browser.',
+    component: lazy(() => import('./base64/Base64Tool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {
