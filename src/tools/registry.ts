@@ -1,7 +1,13 @@
+import { lazy } from 'react'
 import type { ToolDefinition, ToolId } from './types'
 
 export const tools: ToolDefinition[] = [
-  // filled in later tasks — start with json-formatter only after Task 4
+  {
+    id: 'json-formatter',
+    title: 'JSON formatter',
+    description: 'Pretty-print or minify JSON in your browser.',
+    component: lazy(() => import('./json-formatter/JsonFormatterTool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {

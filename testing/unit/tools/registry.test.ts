@@ -11,7 +11,7 @@ describe('registry', () => {
     expect(getToolById('nope')).toBeUndefined()
   })
 
-  it('starts with zero tools before features land', () => {
-    expect(tools.length).toBe(0)
+  it('includes json-formatter', () => {
+    expect(tools.some((t) => t.id === 'json-formatter')).toBe(true)
   })
 })
