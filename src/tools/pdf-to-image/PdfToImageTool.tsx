@@ -152,7 +152,7 @@ export function PdfToImageTool() {
           <CardContent className="space-y-4">
             <div className="flex flex-col items-center gap-3 rounded-lg border-2 border-dashed border-input bg-muted/30 px-6 py-8 text-center">
               <Label htmlFor="pdf-file-input" className="text-muted-foreground">
-                Drop a PDF here or choose a file
+                Choose a PDF file
               </Label>
               <Input
                 id="pdf-file-input"
