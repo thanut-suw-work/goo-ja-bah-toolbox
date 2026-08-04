@@ -15,15 +15,17 @@ export function PdfToImageTool() {
   const [format, setFormat] = useState<ImageFormat>('png')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
-  const fileRef = useRef<File | null>(null)
+  const pendingUrlsRef = useRef<Set<string>>(new Set())
 
+  // Revoke any object URL that hasn't been auto-revoked yet when the tool
+  // unmounts, so we never leak blob URLs after the component goes away.
   useEffect(() => {
-    fileRef.current = file
-  }, [file])
-
-  useEffect(() => {
+    const pendingUrls = pendingUrlsRef.current
     return () => {
-      fileRef.current = null
+      for (const url of pendingUrls) {
+        URL.revokeObjectURL(url)
+      }
+      pendingUrls.clear()
     }
   }, [])
 
@@ -59,12 +61,25 @@ export function PdfToImageTool() {
     setBusy(true)
     try {
       const blobs = await renderPagesToBlobs(file, range.from, range.to, format)
-      await downloadBlobs(blobs, format)
+      const url = await downloadBlobs(blobs, format)
+      if (url) registerObjectUrl(url)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Conversion failed')
     } finally {
       setBusy(false)
     }
+  }
+
+  // Track the object URL so unmount can still revoke it, but also revoke it
+  // ourselves shortly after the download starts in the common case where the
+  // tool stays mounted (the browser needs a moment to pick up the download).
+  function registerObjectUrl(url: string) {
+    pendingUrlsRef.current.add(url)
+    setTimeout(() => {
+      if (pendingUrlsRef.current.delete(url)) {
+        URL.revokeObjectURL(url)
+      }
+    }, 1000)
   }
 
   return (

@@ -77,14 +77,23 @@ export async function renderPagesToBlobs(
   }
 }
 
-export async function downloadBlobs(blobs: Blob[], format: ImageFormat): Promise<void> {
-  if (blobs.length === 0) return
+/**
+ * Triggers a download for the given blob(s) and returns the object URL that
+ * was created for it, so the caller can own its lifecycle (e.g. revoke it on
+ * unmount). Returns `null` when there is nothing to download.
+ */
+export async function downloadBlobs(
+  blobs: Blob[],
+  format: ImageFormat,
+): Promise<string | null> {
+  if (blobs.length === 0) return null
 
   const ext = format === 'jpg' ? 'jpg' : 'png'
 
   if (blobs.length === 1) {
-    downloadUrl(URL.createObjectURL(blobs[0]), `page.${ext}`)
-    return
+    const url = URL.createObjectURL(blobs[0])
+    triggerDownload(url, `page.${ext}`)
+    return url
   }
 
   const zip = new JSZip()
@@ -93,16 +102,16 @@ export async function downloadBlobs(blobs: Blob[], format: ImageFormat): Promise
     zip.file(`page-${pageNumber}.${ext}`, blob)
   })
   const zipBlob = await zip.generateAsync({ type: 'blob' })
-  downloadUrl(URL.createObjectURL(zipBlob), 'pages.zip')
+  const url = URL.createObjectURL(zipBlob)
+  triggerDownload(url, 'pages.zip')
+  return url
 }
 
-function downloadUrl(url: string, filename: string): void {
+function triggerDownload(url: string, filename: string): void {
   const link = document.createElement('a')
   link.href = url
   link.download = filename
   document.body.appendChild(link)
   link.click()
   link.remove()
-  // Defer revoke so the browser has a chance to start the download.
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
