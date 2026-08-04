@@ -126,4 +126,5 @@ No thumbnail preview grid. Object URL revoke rules stay as implemented.
 - All seven tools use light prototype-style chrome
 - PDF wizard completes upload → range → convert → download with existing privacy behavior
 - No theme toggle; no theme storage
+- Warm pale-yellow paper background (not cool grey) on home + tools
 - `npm test`, `npm run test:e2e`, and `npm run build` pass
