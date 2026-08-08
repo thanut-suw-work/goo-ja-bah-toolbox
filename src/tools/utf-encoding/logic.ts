@@ -29,3 +29,38 @@ export function parseHex(input: string): HexParseResult {
   }
   return { ok: true, bytes }
 }
+
+export function encodeUtf(
+  text: string,
+  encoding: UtfEncoding,
+  bom: boolean,
+): string {
+  if (encoding === 'utf-8') {
+    void bom
+    return formatHex(new TextEncoder().encode(text))
+  }
+  throw new Error(`encode not implemented: ${encoding}`)
+}
+
+export function decodeUtf(
+  hex: string,
+  encoding: UtfEncoding,
+  bom: boolean,
+): UtfDecodeResult {
+  const parsed = parseHex(hex)
+  if (!parsed.ok) return parsed
+  let bytes = parsed.bytes
+  if (encoding === 'utf-8') {
+    void bom
+    try {
+      const text = new TextDecoder('utf-8', { fatal: true }).decode(bytes)
+      return { ok: true, text }
+    } catch (e) {
+      return {
+        ok: false,
+        error: e instanceof Error ? e.message : 'Invalid UTF-8',
+      }
+    }
+  }
+  throw new Error(`decode not implemented: ${encoding}`)
+}
