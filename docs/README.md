@@ -25,6 +25,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/specs/2026-08-05-tool-ui-prototype-light-design.md` | Light prototype-style tool UI + PDF wizard + home origin note |
 | `superpowers/specs/2026-08-05-home-origin-note-design.md` | Superseded (origin note folded into tool-ui spec) |
 | `superpowers/specs/2026-08-05-github-pages-deploy-design.md` | GitHub Pages via Actions (project path, Vitest gate, SPA 404) |
+| `superpowers/specs/2026-08-08-utf-encoding-design.md` | UTF encoding tool design |
 
 ## Implementation plans
 
@@ -33,6 +34,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/plans/2026-08-05-gjb-toolbox.md` | MVP implementation plan (scaffold → tools → e2e → Impeccable) |
 | `superpowers/plans/2026-08-05-tool-ui-prototype-light.md` | Tool UI restyle + PDF wizard + origin note |
 | `superpowers/plans/2026-08-05-github-pages-deploy.md` | GitHub Pages via Actions (test gate, project base, SPA 404) |
+| `superpowers/plans/2026-08-08-utf-encoding.md` | UTF encoding tool implementation plan |
 
 ## Feature docs
 
@@ -47,6 +49,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `features/unix-timestamp.md` | Unix timestamp |
 | `features/text-case.md` | Text case |
 | `features/pdf-to-image.md` | PDF → PNG/JPG with page range |
+| `features/utf-encoding.md` | UTF encoding bi-converter |
 
 ## UI reference (repo root)
 

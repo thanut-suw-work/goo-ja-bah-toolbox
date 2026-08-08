@@ -15,6 +15,7 @@ Single source of truth for available tools: metadata + lazy-loaded UI (`src/tool
 | `unix-timestamp` | Unix timestamp |
 | `text-case` | Text case |
 | `pdf-to-image` | PDF to image |
+| `utf-encoding` | UTF encoding |
 
 ## Behavior
 

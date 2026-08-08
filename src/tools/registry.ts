@@ -44,6 +44,13 @@ export const tools: ToolDefinition[] = [
     description: 'Convert a PDF page range to PNG or JPG in your browser.',
     component: lazy(() => import('./pdf-to-image/PdfToImageTool')),
   },
+  {
+    id: 'utf-encoding',
+    title: 'UTF encoding',
+    description:
+      'Convert text to and from UTF-8, UTF-16LE, or UTF-32LE hex bytes.',
+    component: lazy(() => import('./utf-encoding/UtfEncodingTool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {

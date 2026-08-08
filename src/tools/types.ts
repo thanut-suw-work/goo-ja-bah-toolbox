@@ -8,6 +8,7 @@ export type ToolId =
   | 'unix-timestamp'
   | 'text-case'
   | 'pdf-to-image'
+  | 'utf-encoding'
 
 export type ToolDefinition = {
   id: ToolId
