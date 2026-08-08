@@ -98,3 +98,41 @@ describe('utf-16le', () => {
     expect(r.ok).toBe(false)
   })
 })
+
+describe('utf-32le', () => {
+  it('encodes ASCII without BOM', () => {
+    expect(encodeUtf('A', 'utf-32le', false)).toBe('41 00 00 00')
+  })
+
+  it('encodes with BOM when requested', () => {
+    expect(encodeUtf('A', 'utf-32le', true)).toBe('FF FE 00 00 41 00 00 00')
+  })
+
+  it('round-trips emoji', () => {
+    const hex = encodeUtf('😀', 'utf-32le', false)
+    const r = decodeUtf(hex, 'utf-32le', false)
+    expect(r.ok).toBe(true)
+    if (r.ok) expect(r.text).toBe('😀')
+  })
+
+  it('strips BOM on decode only when bom flag on', () => {
+    const withBom = encodeUtf('A', 'utf-32le', true)
+    const stripped = decodeUtf(withBom, 'utf-32le', true)
+    expect(stripped.ok && stripped.text).toBe('A')
+  })
+
+  it('errors on truncated code point', () => {
+    const r = decodeUtf('41 00', 'utf-32le', false)
+    expect(r.ok).toBe(false)
+  })
+
+  it('errors on surrogate code point', () => {
+    const r = decodeUtf('00 D8 00 00', 'utf-32le', false)
+    expect(r.ok).toBe(false)
+  })
+
+  it('errors on out-of-range code point', () => {
+    const r = decodeUtf('00 00 11 00', 'utf-32le', false) // 0x110000
+    expect(r.ok).toBe(false)
+  })
+})

@@ -31,6 +31,7 @@ export function parseHex(input: string): HexParseResult {
 }
 
 const UTF16_BOM = [0xff, 0xfe] as const
+const UTF32_BOM = [0xff, 0xfe, 0x00, 0x00] as const
 
 function encodeUtf16Le(text: string, bom: boolean): Uint8Array {
   const units: number[] = []
@@ -90,6 +91,53 @@ function decodeUtf16Le(bytes: Uint8Array, bom: boolean): UtfDecodeResult {
   return { ok: true, text }
 }
 
+function encodeUtf32Le(text: string, bom: boolean): Uint8Array {
+  const cps: number[] = []
+  if (bom) cps.push(0xfeff)
+  for (const ch of text) cps.push(ch.codePointAt(0)!)
+  const out = new Uint8Array(cps.length * 4)
+  for (let i = 0; i < cps.length; i++) {
+    const cp = cps[i]!
+    out[i * 4] = cp & 0xff
+    out[i * 4 + 1] = (cp >> 8) & 0xff
+    out[i * 4 + 2] = (cp >> 16) & 0xff
+    out[i * 4 + 3] = (cp >> 24) & 0xff
+  }
+  return out
+}
+
+function decodeUtf32Le(bytes: Uint8Array, bom: boolean): UtfDecodeResult {
+  let offset = 0
+  if (
+    bom &&
+    bytes.length >= 4 &&
+    bytes[0] === UTF32_BOM[0] &&
+    bytes[1] === UTF32_BOM[1] &&
+    bytes[2] === UTF32_BOM[2] &&
+    bytes[3] === UTF32_BOM[3]
+  ) {
+    offset = 4
+  }
+  const slice = bytes.subarray(offset)
+  if (slice.length % 4 !== 0) {
+    return { ok: false, error: 'Truncated UTF-32LE (length not multiple of 4)' }
+  }
+  let text = ''
+  for (let i = 0; i < slice.length; i += 4) {
+    const cp =
+      slice[i]! |
+      (slice[i + 1]! << 8) |
+      (slice[i + 2]! << 16) |
+      (slice[i + 3]! << 24)
+    const code = cp >>> 0
+    if (code > 0x10ffff || (code >= 0xd800 && code <= 0xdfff)) {
+      return { ok: false, error: 'Invalid Unicode code point in UTF-32LE' }
+    }
+    text += String.fromCodePoint(code)
+  }
+  return { ok: true, text }
+}
+
 export function encodeUtf(
   text: string,
   encoding: UtfEncoding,
@@ -102,7 +150,11 @@ export function encodeUtf(
   if (encoding === 'utf-16le') {
     return formatHex(encodeUtf16Le(text, bom))
   }
-  throw new Error(`encode not implemented: ${encoding}`)
+  if (encoding === 'utf-32le') {
+    return formatHex(encodeUtf32Le(text, bom))
+  }
+  const _exhaustive: never = encoding
+  throw new Error(`encode not implemented: ${_exhaustive}`)
 }
 
 export function decodeUtf(
@@ -128,5 +180,9 @@ export function decodeUtf(
   if (encoding === 'utf-16le') {
     return decodeUtf16Le(bytes, bom)
   }
-  throw new Error(`decode not implemented: ${encoding}`)
+  if (encoding === 'utf-32le') {
+    return decodeUtf32Le(bytes, bom)
+  }
+  const _exhaustive: never = encoding
+  throw new Error(`decode not implemented: ${_exhaustive}`)
 }
