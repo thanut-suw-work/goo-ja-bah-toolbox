@@ -60,3 +60,41 @@ describe('utf-8', () => {
     expect(encodeUtf('A', 'utf-8', true)).toBe('41')
   })
 })
+
+describe('utf-16le', () => {
+  it('encodes ASCII without BOM', () => {
+    expect(encodeUtf('Hi', 'utf-16le', false)).toBe('48 00 69 00')
+  })
+
+  it('encodes with BOM when requested', () => {
+    expect(encodeUtf('A', 'utf-16le', true)).toBe('FF FE 41 00')
+  })
+
+  it('round-trips emoji (surrogate pair)', () => {
+    const hex = encodeUtf('😀', 'utf-16le', false)
+    const r = decodeUtf(hex, 'utf-16le', false)
+    expect(r.ok).toBe(true)
+    if (r.ok) expect(r.text).toBe('😀')
+  })
+
+  it('strips BOM on decode only when bom flag on', () => {
+    const withBom = encodeUtf('A', 'utf-16le', true)
+    const stripped = decodeUtf(withBom, 'utf-16le', true)
+    expect(stripped.ok && stripped.text).toBe('A')
+    // bom off: leading FF FE decoded as code units → U+FEFF + 'A'
+    const kept = decodeUtf(withBom, 'utf-16le', false)
+    expect(kept.ok).toBe(true)
+    if (kept.ok) expect(kept.text).toBe('\uFEFFA')
+  })
+
+  it('errors on truncated code unit', () => {
+    const r = decodeUtf('48', 'utf-16le', false)
+    expect(r.ok).toBe(false)
+  })
+
+  it('errors on lone high surrogate', () => {
+    // U+D800 alone LE: 00 D8
+    const r = decodeUtf('00 D8', 'utf-16le', false)
+    expect(r.ok).toBe(false)
+  })
+})
