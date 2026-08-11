@@ -51,6 +51,19 @@ export const tools: ToolDefinition[] = [
       'Convert text to and from UTF-8, UTF-16LE, or UTF-32LE hex bytes.',
     component: lazy(() => import('./utf-encoding/UtfEncodingTool')),
   },
+  {
+    id: 'plantuml',
+    title: 'PlantUML',
+    description:
+      'View .puml diagrams in the browser. Nothing is uploaded.',
+    component: lazy(() => import('./plantuml/PlantumlTool')),
+  },
+  {
+    id: 'svg-to-image',
+    title: 'SVG to image',
+    description: 'Convert SVG to PNG or JPEG in your browser.',
+    component: lazy(() => import('./svg-to-image/SvgToImageTool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {

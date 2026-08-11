@@ -9,6 +9,8 @@ export type ToolId =
   | 'text-case'
   | 'pdf-to-image'
   | 'utf-encoding'
+  | 'plantuml'
+  | 'svg-to-image'
 
 export type ToolDefinition = {
   id: ToolId

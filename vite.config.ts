@@ -8,6 +8,14 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // Fallback if the package export map ever blocks `?url` resolution.
+      '@plantuml/core/viz-global.js': path.resolve(
+        __dirname,
+        'node_modules/@plantuml/core/viz-global.js',
+      ),
     },
+  },
+  optimizeDeps: {
+    exclude: ['@plantuml/core'],
   },
 })

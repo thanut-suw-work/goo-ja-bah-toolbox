@@ -52,7 +52,7 @@ that claim is checkable in the network tab.
 MVP tools (from the approved design spec): JSON formatter, Base64
 encode/decode, UUID v4 generator, SHA-256 hash, Unix timestamp ↔ ISO UTC
 converter, text case converter, PDF → PNG/JPG page-range export (client-side
-`pdf.js`, lazy-loaded chunk).
+`pdf.js`, lazy-loaded chunk), SVG → PNG/JPEG (canvas, shared `svgToRaster`). PlantUML viewer (in-browser `@plantuml/core`, lazy chunk; SVG + PNG per diagram).
 
 Constraints:
 
@@ -63,8 +63,7 @@ Constraints:
 - Tool-local React state only; no global store.
 - New tools are added via a registry entry + lazy import + feature doc +
   mirrored unit tests (see `docs/features/tool-registry.md`).
-- Heavy dependencies (`pdf.js`, `jszip`) must stay in an async chunk isolated
-  to the PDF tool so first paint elsewhere stays small.
+- Heavy dependencies (`pdf.js`, `jszip`, `@plantuml/core`) must stay in an async chunk isolated to the tool that needs them so first paint elsewhere stays small.
 
 ## Brand Commitments
 

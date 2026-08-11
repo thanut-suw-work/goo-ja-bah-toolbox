@@ -11,7 +11,7 @@ describe('registry', () => {
     expect(getToolById('nope')).toBeUndefined()
   })
 
-  it('exposes exactly the expected eight tools', () => {
+  it('exposes the expected tool ids', () => {
     const expected = [
       'json-formatter',
       'base64',
@@ -21,6 +21,8 @@ describe('registry', () => {
       'text-case',
       'pdf-to-image',
       'utf-encoding',
+      'plantuml',
+      'svg-to-image',
     ]
     expect(tools.map((t) => t.id).sort()).toEqual([...expected].sort())
   })

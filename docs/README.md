@@ -26,6 +26,8 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/specs/2026-08-05-home-origin-note-design.md` | Superseded (origin note folded into tool-ui spec) |
 | `superpowers/specs/2026-08-05-github-pages-deploy-design.md` | GitHub Pages via Actions (project path, Vitest gate, SPA 404) |
 | `superpowers/specs/2026-08-08-utf-encoding-design.md` | UTF encoding tool design |
+| `superpowers/specs/2026-08-11-plantuml-viewer-design.md` | PlantUML viewer (in-browser `@plantuml/core`) |
+| `superpowers/specs/2026-08-11-svg-to-image-design.md` | SVG → PNG/JPEG (shared `svgToRaster`) |
 
 ## Implementation plans
 
@@ -35,6 +37,8 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/plans/2026-08-05-tool-ui-prototype-light.md` | Tool UI restyle + PDF wizard + origin note |
 | `superpowers/plans/2026-08-05-github-pages-deploy.md` | GitHub Pages via Actions (test gate, project base, SPA 404) |
 | `superpowers/plans/2026-08-08-utf-encoding.md` | UTF encoding tool implementation plan |
+| `superpowers/plans/2026-08-11-svg-to-image.md` | SVG → PNG/JPEG + shared `svgToRaster` |
+| `superpowers/plans/2026-08-11-plantuml-viewer.md` | PlantUML viewer (`@plantuml/core`, stacked SVG) |
 
 ## Feature docs
 
@@ -50,6 +54,8 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `features/text-case.md` | Text case |
 | `features/pdf-to-image.md` | PDF → PNG/JPG with page range |
 | `features/utf-encoding.md` | UTF encoding bi-converter |
+| `features/svg-to-image.md` | SVG → PNG/JPEG |
+| `features/plantuml.md` | PlantUML viewer (in-browser `@plantuml/core`) |
 
 ## UI reference (repo root)
 

@@ -16,13 +16,15 @@ Single source of truth for available tools: metadata + lazy-loaded UI (`src/tool
 | `text-case` | Text case |
 | `pdf-to-image` | PDF to image |
 | `utf-encoding` | UTF encoding |
+| `svg-to-image` | SVG to image |
+| `plantuml` | PlantUML |
 
 ## Behavior
 
 - Export typed list: `id`, `title`, `description`, lazy `component`
 - Home and nav consume registry for listing
 - Router resolves `/tools/:id` via registry; missing id → not-found
-- PDF and other heavy tools use separate dynamic imports (`React.lazy`)
+- PDF, PlantUML, and other heavy tools use separate dynamic imports (`React.lazy`)
 
 ## Add-tool checklist
 
