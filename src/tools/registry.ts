@@ -48,7 +48,7 @@ export const tools: ToolDefinition[] = [
     id: 'utf-encoding',
     title: 'UTF encoding',
     description:
-      'Convert text to and from UTF-8, UTF-16LE, or UTF-32LE hex bytes.',
+      'Convert text to and from UTF-8, UTF-16LE, UTF-32LE hex bytes, or Unicode code points.',
     component: lazy(() => import('./utf-encoding/UtfEncodingTool')),
   },
   {
