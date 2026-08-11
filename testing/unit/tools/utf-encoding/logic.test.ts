@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest'
 import {
   decodeUtf,
   encodeUtf,
+  formatCodePoints,
   formatHex,
+  parseCodePoints,
   parseHex,
 } from '@/tools/utf-encoding/logic'
 
@@ -32,6 +34,60 @@ describe('formatHex / parseHex', () => {
   it('errors on non-hex', () => {
     const r = parseHex('zz')
     expect(r.ok).toBe(false)
+  })
+})
+
+describe('formatCodePoints / parseCodePoints', () => {
+  it('formats unpadded uppercase 0x tokens', () => {
+    expect(formatCodePoints('testtt อิ')).toBe(
+      '0x74 0x65 0x73 0x74 0x74 0x74 0x20 0xE2D 0xE34',
+    )
+  })
+
+  it('formats emoji as a scalar not surrogates', () => {
+    expect(formatCodePoints('😀')).toBe('0x1F600')
+  })
+
+  it('formats NUL as 0x0', () => {
+    expect(formatCodePoints('\0')).toBe('0x0')
+  })
+
+  it('parses padded, unpadded, commas, and missing 0x', () => {
+    const a = parseCodePoints('0x74 0xE2D')
+    const b = parseCodePoints('0x0E2D')
+    const c = parseCodePoints('74,e2d')
+    const d = parseCodePoints('0x74\n0x65')
+    expect(a.ok && b.ok && c.ok && d.ok).toBe(true)
+    if (a.ok && b.ok && c.ok && d.ok) {
+      expect(a.codePoints).toEqual([0x74, 0xe2d])
+      expect(b.codePoints).toEqual([0xe2d])
+      expect(c.codePoints).toEqual([0x74, 0xe2d])
+      expect(d.codePoints).toEqual([0x74, 0x65])
+    }
+  })
+
+  it('errors on empty input', () => {
+    const r = parseCodePoints('   ,  ')
+    expect(r.ok).toBe(false)
+    if (!r.ok) expect(r.error).toBe('Empty code point input')
+  })
+
+  it('errors on non-hex and lone 0x', () => {
+    const a = parseCodePoints('0xzz')
+    const b = parseCodePoints('0x')
+    expect(a.ok).toBe(false)
+    expect(b.ok).toBe(false)
+    if (!a.ok) expect(a.error).toBe('Invalid hex characters')
+    if (!b.ok) expect(b.error).toBe('Invalid hex characters')
+  })
+
+  it('errors on out-of-range and surrogates', () => {
+    const a = parseCodePoints('0x110000')
+    const b = parseCodePoints('0xD800')
+    expect(a.ok).toBe(false)
+    expect(b.ok).toBe(false)
+    if (!a.ok) expect(a.error).toBe('Invalid Unicode code point')
+    if (!b.ok) expect(b.error).toBe('Surrogate code point')
   })
 })
 

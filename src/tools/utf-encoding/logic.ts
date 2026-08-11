@@ -30,6 +30,39 @@ export function parseHex(input: string): HexParseResult {
   return { ok: true, bytes }
 }
 
+export type CodePointParseResult =
+  | { ok: true; codePoints: number[] }
+  | { ok: false; error: string }
+
+export function formatCodePoints(text: string): string {
+  return [...text]
+    .map((ch) => '0x' + ch.codePointAt(0)!.toString(16).toUpperCase())
+    .join(' ')
+}
+
+export function parseCodePoints(input: string): CodePointParseResult {
+  const tokens = input.split(/[\s,]+/).filter((t) => t.length > 0)
+  if (tokens.length === 0) {
+    return { ok: false, error: 'Empty code point input' }
+  }
+  const codePoints: number[] = []
+  for (const raw of tokens) {
+    const s = raw.replace(/^0x/i, '')
+    if (s.length === 0 || !/^[0-9a-fA-F]+$/.test(s)) {
+      return { ok: false, error: 'Invalid hex characters' }
+    }
+    const cp = Number.parseInt(s, 16)
+    if (cp > 0x10ffff) {
+      return { ok: false, error: 'Invalid Unicode code point' }
+    }
+    if (cp >= 0xd800 && cp <= 0xdfff) {
+      return { ok: false, error: 'Surrogate code point' }
+    }
+    codePoints.push(cp)
+  }
+  return { ok: true, codePoints }
+}
+
 const UTF16_BOM = [0xff, 0xfe] as const
 const UTF32_BOM = [0xff, 0xfe, 0x00, 0x00] as const
 
