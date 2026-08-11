@@ -90,9 +90,9 @@ Engine singleton for the page visit. Sequential `await` per block (do not parall
 
 `viz-global.js` must run as a classic script (Graphviz global) before `plantuml.js`. Implementation must:
 
-1. Resolve a bundled URL (not a CDN)
-2. Insert `<script src=…>` once; wait for `load`
-3. Then `import()` the ES module
+1. Resolve bundled URLs via `?url` (not a CDN) for **both** `viz-global.js` and `plantuml.js`
+2. Insert `<script src=…>` once for viz; wait for `load`
+3. Then `import()` the **untransformed** `plantuml.js` asset URL (`/* @vite-ignore */`). Do not let Vite minify/bundle TeaVM — that rewrites identifiers and NPEs on GitHub Pages
 4. Reuse on later Visualize clicks
 
 If the package export map blocks `?url`, copy or alias in Vite config — keep runtime origin = our static host.

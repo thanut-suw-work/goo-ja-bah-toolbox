@@ -23,7 +23,7 @@ View PlantUML source in the browser. Paste or open one file, click **Visualize**
 
 ## Engine
 
-- npm `@plantuml/core` ≥ 1.2026.6 (MIT). Classic-script inject of bundled `viz-global.js`, then dynamic import of `plantuml.js`. `renderToString(lines, onSuccess, onError, {})` wrapped as a Promise with a 30s timeout and window `error` / `unhandledrejection` capture (TeaVM may throw on a timer instead of `onError`). Sequential queue (TeaVM overwrites in-flight work). Plain `string[]` copy before the engine (no holes / proxies).
+- npm `@plantuml/core` ≥ 1.2026.6 (MIT). Classic-script inject of bundled `viz-global.js`, then dynamic import of `plantuml.js`. Both files load via Vite `?url` (copied as-is). Do not import `plantuml.js` as a bundlable module — production minify rewrites TeaVM names and the engine crashes (`bGH` / empty error) on GitHub Pages. `renderToString(lines, onSuccess, onError, {})` wrapped as a Promise with a 30s timeout and window `error` / `unhandledrejection` capture (TeaVM may throw on a timer instead of `onError`). Sequential queue (TeaVM overwrites in-flight work). Plain `string[]` copy before the engine (no holes / proxies).
 - Lazy chunk: only `/tools/plantuml` downloads the engine. No CDN at runtime.
 - Shared PNG: `svgToRaster(svg, { format: 'png', scale: 1 })` from `src/tools/shared/svgToRaster.ts` (owned by the SVG to image tool). This tool must not reimplement rasterization.
 

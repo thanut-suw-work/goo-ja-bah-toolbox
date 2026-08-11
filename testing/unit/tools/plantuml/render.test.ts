@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe, it, expect } from 'vitest'
 import { mapEngineError } from '@/tools/plantuml/render'
 
@@ -45,5 +48,21 @@ describe('mapEngineError', () => {
     )
     expect(r.line).toBeNull()
     expect(r.error).toMatch(/PlantUML engine crashed/i)
+  })
+})
+
+describe('engine load wiring', () => {
+  it('loads plantuml.js as a URL asset so Vite cannot minify TeaVM', () => {
+    const here = path.dirname(fileURLToPath(import.meta.url))
+    const src = readFileSync(
+      path.resolve(here, '../../../../src/tools/plantuml/render.ts'),
+      'utf8',
+    )
+    expect(src).toMatch(
+      /import\(['"]@plantuml\/core\/plantuml\.js\?url['"]\)/,
+    )
+    expect(src).not.toMatch(
+      /import\(['"]@plantuml\/core\/plantuml\.js['"]\)/,
+    )
   })
 })

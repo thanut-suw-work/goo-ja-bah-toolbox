@@ -114,11 +114,15 @@ function injectClassicScript(src: string): Promise<void> {
 }
 
 async function loadEngineOnce(): Promise<Engine> {
-  // Bundled URL from our static host (Pages base path included). Never a CDN.
-  const vizMod = await import('@plantuml/core/viz-global.js?url')
-  const vizUrl = vizMod.default
+  // Copy both files as static assets (`?url`). Never a CDN.
+  // Bundling plantuml.js lets Vite minify TeaVM; that NPEs on Pages
+  // (`bGH` / empty "PlantUML engine error").
+  const vizUrl = (await import('@plantuml/core/viz-global.js?url')).default
   await injectClassicScript(vizUrl)
-  const core = await import('@plantuml/core/plantuml.js')
+  const plantumlUrl = (await import('@plantuml/core/plantuml.js?url')).default
+  const core = (await import(/* @vite-ignore */ plantumlUrl)) as {
+    renderToString: RenderToString
+  }
   return { renderToString: core.renderToString }
 }
 

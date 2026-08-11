@@ -13,6 +13,10 @@ export default defineConfig({
         __dirname,
         'node_modules/@plantuml/core/viz-global.js',
       ),
+      '@plantuml/core/plantuml.js': path.resolve(
+        __dirname,
+        'node_modules/@plantuml/core/plantuml.js',
+      ),
     },
   },
   optimizeDeps: {
