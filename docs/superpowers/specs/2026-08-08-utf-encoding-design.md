@@ -4,6 +4,8 @@ Date: 2026-08-08
 Status: approved (brainstorm)  
 Registry id: `utf-encoding` · Route: `/tools/utf-encoding`
 
+**Extension (2026-08-11):** fourth encoding **Code points** (`0x74 0xE2D` scalars, not UTF bytes). See `docs/superpowers/specs/2026-08-11-utf-code-points-design.md`.
+
 ## Summary
 
 New toolbox tool: convert plain text ↔ hex byte dump for **UTF-8**, **UTF-16LE**, and **UTF-32LE** (one encoding at a time). UI mirrors Base64 (IoPanels + ActionBar + Run). Client-only; ephemeral React state only.
@@ -46,8 +48,8 @@ Rejected:
 | Input panel | Editable textarea; Clear resets input, output, error |
 | Output panel | Read-only; Copy via clipboard + toast |
 | Mode | Encode (text → hex) \| Decode (hex → text) |
-| Encoding | UTF-8 \| UTF-16LE \| UTF-32LE |
-| BOM | Checkbox, default off; disabled when encoding is UTF-8 |
+| Encoding | UTF-8 \| UTF-16LE \| UTF-32LE \| Code points (see 2026-08-11 spec) |
+| BOM | Checkbox, default off; disabled when encoding is UTF-8 or Code points |
 | Run | Computes; disabled when input empty/whitespace-only |
 | Error | Inline `role="alert"`; clears output on failure |
 
@@ -59,6 +61,7 @@ Encode output format: uppercase spaced hex (`48 65 6C 6C 6F`).
 |--------|------|
 | `parseHex(input)` | Strip whitespace/commas/`0x`; require even length; → `Uint8Array` or error |
 | `formatHex(bytes)` | Uppercase spaced hex string |
+| `parseCodePoints` / `formatCodePoints` | Code-point `0x` tokens — see 2026-08-11 spec |
 | `encodeUtf(text, encoding, bom)` | → hex string |
 | `decodeUtf(hex, encoding, bom)` | → `{ ok: true, text }` \| `{ ok: false, error }` |
 
@@ -67,6 +70,7 @@ Encode output format: uppercase spaced hex (`48 65 6C 6C 6F`).
 - **UTF-8:** `TextEncoder`; ignore `bom`
 - **UTF-16LE:** code points → UTF-16 code units → little-endian bytes; if `bom`, prepend `FF FE`
 - **UTF-32LE:** code points → 32-bit LE; if `bom`, prepend `FF FE 00 00`
+- **Code points:** `formatCodePoints`; ignore `bom` (2026-08-11 spec)
 
 ### Decode
 
@@ -75,6 +79,7 @@ Encode output format: uppercase spaced hex (`48 65 6C 6C 6F`).
 - **UTF-8:** `TextDecoder('utf-8', { fatal: true })`
 - **UTF-16LE:** pair bytes to code units; reject lone surrogates; assemble code points
 - **UTF-32LE:** groups of 4 bytes; reject values outside `0..0x10FFFF` or surrogate range `0xD800..0xDFFF`
+- **Code points:** `parseCodePoints` then `String.fromCodePoint` (2026-08-11 spec); do not use byte `parseHex`
 - Truncated sequences / invalid hex → clear error message
 
 ## Files
