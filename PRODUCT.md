@@ -24,9 +24,10 @@ quick one-off transform, want to paste, get an answer, and move on.
 ## Product Purpose
 
 GJB Toolbox is a collection of small, fast, client-side browser utilities.
-Everything runs in the visitor's own tab; nothing is uploaded, logged, or
-persisted. Success is: open a tool, do the task, leave with the state gone —
-by design, not by omission.
+Everything runs in the visitor's own tab; nothing is uploaded or logged.
+Tool input/output is not persisted. The only stored value is the theme
+preference (`gjb-theme`). Success is: open a tool, do the task, leave with
+the tool state gone — by design, not by omission.
 
 ## Positioning
 
@@ -58,8 +59,9 @@ Constraints:
 
 - Static, client-only deploy (GitHub Pages / Cloudflare / Netlify-class
   hosting). No API, no auth, no server component of any kind.
-- No `localStorage`, `sessionStorage`, or IndexedDB for app or tool state.
-  Refreshing the page clears everything; this is intentional, not a gap.
+- No `localStorage`, `sessionStorage`, or IndexedDB for app or tool state,
+  except `localStorage['gjb-theme']` (`dark` | `light` | `system`).
+  Refreshing the page still clears tool input/output; that is intentional.
 - Tool-local React state only; no global store.
 - New tools are added via a registry entry + lazy import + feature doc +
   mirrored unit tests (see `docs/features/tool-registry.md`).

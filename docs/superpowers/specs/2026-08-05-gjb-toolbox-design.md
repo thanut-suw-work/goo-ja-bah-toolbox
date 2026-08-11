@@ -18,7 +18,7 @@ Fast client-side-rendered (CSR) webapp of small browser utilities. No backend. N
 ## Non-goals
 
 - Accounts, sync, cloud storage, analytics, cookies for tracking
-- `localStorage` / `sessionStorage` / IndexedDB
+- `localStorage` / `sessionStorage` / IndexedDB (superseded for theme only — see `2026-08-12-theme-design.md`; tool state still ephemeral)
 - Server-side PDF conversion or any API
 - Visual regression / full a11y suite on day one
 
@@ -92,7 +92,7 @@ No global store required for MVP. Tool-local React state only.
 
 - No network calls for tool processing (static asset + worker scripts only)  
 - No analytics, no cookies for tracking  
-- No `localStorage` / `sessionStorage` / IndexedDB  
+- No `localStorage` / `sessionStorage` / IndexedDB except `gjb-theme` — see `2026-08-12-theme-design.md`  
 - PDF/files via File API only; revoke object URLs on unmount  
 
 See `docs/privacy.md`.

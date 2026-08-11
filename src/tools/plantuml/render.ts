@@ -147,6 +147,7 @@ function copyLines(lines: string[]): string[] {
 function renderToStringP(
   renderToString: RenderToString,
   lines: string[],
+  dark: boolean,
 ): Promise<string> {
   const safeLines = copyLines(lines)
   return new Promise((resolve, reject) => {
@@ -181,7 +182,7 @@ function renderToStringP(
         safeLines,
         (svg) => finish(() => resolve(svg)),
         (message) => finish(() => reject(new Error(asErrorMessage(message)))),
-        {},
+        { dark },
       )
     } catch (e) {
       finish(() =>
@@ -198,11 +199,12 @@ function renderToStringP(
 export function renderBlock(
   lines: string[],
   startLine: number,
+  dark: boolean,
 ): Promise<EngineRenderResult> {
   return enqueue(async () => {
     try {
       const engine = await loadEngine()
-      const svg = await renderToStringP(engine.renderToString, lines)
+      const svg = await renderToStringP(engine.renderToString, lines, dark)
       return { ok: true as const, svg }
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e)

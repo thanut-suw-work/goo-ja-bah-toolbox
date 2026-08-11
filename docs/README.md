@@ -9,6 +9,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | Starting any implementation task | `AGENTS.md`, this file, design spec below |
 | Changing app shell, routing, or how tools register | `architecture.md`, `features/tool-registry.md`, `features/home.md` |
 | Touching privacy, storage, network, analytics | `privacy.md` |
+| Theme / `gjb-theme` / dark default | `superpowers/specs/2026-08-12-theme-design.md`, `privacy.md`, `DESIGN.md` |
 | Implementing or changing a specific tool | matching file under `features/` + `architecture.md` (registry section) |
 | Adding a **new** tool | `features/tool-registry.md` (checklist), create `features/<id>.md`, mirror tests per `../testing/README.md` |
 | PDF → image work | `features/pdf-to-image.md`, `privacy.md` |
@@ -31,6 +32,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/specs/2026-08-11-svg-to-image-design.md` | SVG → PNG/JPEG (shared `svgToRaster`) |
 | `superpowers/specs/2026-08-12-mermaid-viewer-design.md` | Mermaid viewer (in-browser `mermaid`) |
 | `superpowers/specs/2026-08-12-tool-groups-design.md` | Home tool groups (accordion by catalog) |
+| `superpowers/specs/2026-08-12-theme-design.md` | Default dark + `gjb-theme` localStorage + header cycle |
 
 ## Implementation plans
 
@@ -45,6 +47,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/plans/2026-08-11-plantuml-viewer.md` | PlantUML viewer (`@plantuml/core`, stacked SVG) |
 | `superpowers/plans/2026-08-12-mermaid-viewer.md` | Mermaid viewer (`mermaid`, stacked SVG) |
 | `superpowers/plans/2026-08-12-tool-groups.md` | Home tool groups (accordion) |
+| `superpowers/plans/2026-08-12-theme.md` | Default dark + `gjb-theme` + header cycle |
 
 ## Feature docs
 

@@ -16,7 +16,7 @@ Instructions for humans and coding agents working in this repo.
 ## Hard rules
 
 - Client-side only. Do not add APIs, auth, telemetry, or remote logging.
-- Do not add browser persistence for tool input/output or preferences (ephemeral by design).
+- Do not add browser persistence for tool input/output. Theme preference may be stored only as `localStorage['gjb-theme']` (`dark` | `light` | `system`). Nothing else.
 - New tool = feature doc under `docs/features/` + registry entry + `src/tools/<id>/` + mirrored tests under `testing/unit/`.
 - Tests live under root `testing/` and **mirror** `src/` (unit) / user flows (e2e). See `testing/README.md`.
 - Keep changes scoped. Update docs when behavior or architecture changes.

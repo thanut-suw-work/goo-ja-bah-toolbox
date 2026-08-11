@@ -12,32 +12,22 @@ deliberate, contained moment before the interface returns to task mode.
 ## Direction
 
 **Workshop, not dashboard.** GJB Toolbox is a small bench of hand tools you
-reach for mid-task, not a SaaS product with a home screen to check daily. The
-world is a workshop bench in daylight: light, warm paper surfaces (pale
-yellow, not cool steel-grey, not cream), a warm brass/copper accent standing
-in for the metal fittings and hand tools themselves, and a soft two-tone
-gradient — warm light from one corner, cool shadow from the other — rather
-than a flat white void or a decorative pattern. Data — JSON, hashes, UUIDs,
-timestamps — is set in a real code/measurement face (JetBrains Mono),
-because it *is* code and data, not because monospace reads as "technical."
-
-**Revision note (this pass):** an earlier draft of this file chose a dark
-ink theme and justified it from the use scene (editor-adjacent, low-glare).
-A project-level frontend rule then flagged than an unprompted dark default
-is itself a bias worth naming — "dark because dev tool" is a category habit
-even when a scene-based reason is written after the fact, and it forecloses
-the far larger share of visitors who read a light interface faster in a lit
-room. This revision keeps every other decision (mode, brand, fonts, layout,
-motion budget) and replaces only the value axis: light surfaces, the same
-brass accent now read as sunlit metal instead of a lamp in the dark.
+reach for mid-task, not a SaaS product with a home screen to check daily.
+**Default is cool slate** (GitHub/editor night: `#0d1117` / `#161b22`) —
+an explicit product choice, not an unprompted “dark because dev tool”
+default. Light remains the daylight workshop: warm pale-yellow paper,
+same brass/copper accent as sunlit metal, two-tone warm/cool gradient.
+Dark uses the same brass fill on a cool wash instead of warm paper glow.
+Visitor cycles Dark → Light → System via one header icon. Data — JSON,
+hashes, UUIDs, timestamps — is set in JetBrains Mono because it *is*
+code and data.
 
 Explicitly refused: purple/indigo tints of any kind, cream-paper +
 terracotta serif warmth, a flat white void with no atmosphere, glowing
 neon edges or halos, card-grid homepage, kicker/eyebrow labels, colored
 border-left accents, unicode-glyph icons, gradient text, hard offset
-"neobrutalist" shadows, and — per this revision — picking either light or
-dark from category habit rather than stating the reason. None of these
-were pinned by the brief, so none are earned.
+"neobrutalist" shadows, warm-walnut “night workshop” dark (rejected in
+brainstorm). None of these were pinned by the brief, so none are earned.
 
 ## Color — Restrained strategy
 
@@ -46,28 +36,41 @@ focus. Everything else is neutral paper steps. No color strategy
 stronger than Restrained is earned here — Operate defaults to it, and
 nothing in this product asks to spend a page-scale color field.
 
+Dark (`:root`, default):
+
 ```css
---bg: #f7f5ed;       /* page background — warm pale-yellow paper, not cool steel */
---surface: #fffcf5;  /* raised chrome: header, panels, hover rows */
+--bg: #0d1117;
+--surface: #161b22;
+--line: rgba(230, 237, 243, 0.12);
+--line-strong: rgba(230, 237, 243, 0.22);
+--text-primary: #e6edf3;
+--text-secondary: #b1bac4;
+--text-tertiary: #8b949e;
+--brass: #d99a3f;
+--brass-hover: #e7ab55;
+--brass-strong: #e7ab55; /* lightened so it clears as text/icon on slate */
+--brass-ink: #241a08;
+--danger: #f85149;
+--success: #3fb950;
+--focus-ring: var(--brass-strong);
+```
 
---line: rgba(15, 23, 42, 0.12);        /* hairline borders, dividers */
---line-strong: rgba(15, 23, 42, 0.22); /* input borders, focus-adjacent */
+Light (`html[data-theme="light"]`):
 
+```css
+--bg: #f7f5ed;
+--surface: #fffcf5;
+--line: rgba(15, 23, 42, 0.12);
+--line-strong: rgba(15, 23, 42, 0.22);
 --text-primary: #14171d;
 --text-secondary: #4b515c;
 --text-tertiary: #6b7280;
-
---brass: #d99a3f;         /* brass/copper fill — buttons, self-contained */
+--brass: #d99a3f;
 --brass-hover: #e7ab55;
---brass-strong: #a35a17;  /* deeper copper — text/icon/border/focus use
-                              directly on light surfaces (the plain
-                              --brass value doesn't clear 4.5:1 as text
-                              on the paper surface; this darker step does) */
---brass-ink: #241a08;     /* text set on filled brass surfaces */
-
---danger: #b23a26;         /* deep brick red — role="alert" text */
---success: #2f7a4d;        /* reserved; not currently used by any tool */
-
+--brass-strong: #a35a17; /* deeper copper — 4.5:1 as text on paper */
+--brass-ink: #241a08;
+--danger: #b23a26;
+--success: #2f7a4d;
 --focus-ring: var(--brass-strong);
 ```
 
@@ -82,35 +85,30 @@ the hex-based workshop tokens would have silently shadowed one system with
 the other. The two token systems intentionally coexist rather than merge:
 
 ```css
-/* Tailwind/shadcn HSL tokens — src/styles/global.css, consumed via
-   Tailwind utility classes (bg-card, text-primary, border-border, …)
-   by every shadcn component (Button, Card, Input, Select, Textarea). */
---background: 42 35% 96%;   /* ~#f7f5ed, same paper as --bg */
---foreground: 30 12% 12%;
---card: 42 40% 99%;
+/* Tailwind/shadcn HSL twins — switch with data-theme alongside hex tokens.
+   Dark :root ≈ --bg #0d1117 / --surface #161b22; light selector keeps
+   the paper values below. Consumed via bg-card, text-primary, … */
+--background: 216 28% 7%;   /* dark default; light: 42 35% 96% */
+--foreground: 210 35% 93%;
+--card: 215 21% 11%;
 --primary: 36 66% 55%;      /* brass, same hue/fill as --brass */
---primary-foreground: 40 55% 9%; /* same intent as --brass-ink */
---border: 40 18% 84%;
---ring: 28 75% 36%;
+--primary-foreground: 40 55% 9%;
+--border: 215 14% 22%;
+--ring: 36 66% 55%;
 ```
 
-Two surfaces only (`--bg` warm paper, `--surface` a barely-lighter warm
-white) instead of a multi-step scale: panels/header/hover-rows raise to
-`--surface` off the `--bg` page, and input/textarea fields inside a raised
-panel sit back down on `--bg` to read as a recessed well — the same two
-tokens do both jobs, reused rather than inventing a third tone.
+Two surfaces only (`--bg`, `--surface`) instead of a multi-step scale:
+panels/header/hover-rows raise to `--surface` off the `--bg` page, and
+input/textarea fields inside a raised panel sit back down on `--bg` to
+read as a recessed well — the same two tokens do both jobs in each theme.
 
 Contrast, checked directly (WCAG relative-luminance formula, not eyeballed)
-against the current `--surface`/`--bg` pair: `--text-primary`, `--text-secondary`,
-`--text-tertiary`, `--brass-strong`, and `--danger` all clear the same floors
-recorded for the prior (cooler, pure-white) surface — `--text-tertiary` is
-the tightest at ≈4.7:1, still above the 4.5:1 body-text floor (it's used
-only for small meta/mono labels, never body copy). The shift from pure
-white/cool steel to warm paper moved every surface value by only a
-fraction of a lightness step, so no role changed which side of its floor
-it sits on. `--brass` (the lighter fill) is intentionally *not* used as
-text on light surfaces — only as a button/pill fill behind the dark
-`--brass-ink`, which reaches ≈7:1 on it.
+against **both** `--surface`/`--bg` pairs. `--text-primary`, `--text-secondary`,
+`--text-tertiary`, `--brass-strong`, and `--danger` must each clear 4.5:1
+on the surface they actually sit on. If a named hex fails, nudge lightness
+in CSS — do not invent a third theme. `--brass` (the lighter fill) is
+intentionally *not* used as text on light surfaces — only as a button/pill
+fill behind `--brass-ink`.
 
 ## Typography
 
@@ -281,15 +279,15 @@ there.
 
 ## Layout
 
-- **App shell header**: sticky, `--surface` (raised warm white), `1px solid
-  --line` bottom edge plus a soft `0 2px 8px -4px` shadow for separation
-  from the page (the page and header are close in value — paper vs. raised
-  surface — so the hairline alone reads weaker in light than it did in
-  dark; the shadow restores the same crispness), compact (not hero-sized)
-  wordmark link — present on every route (including tool pages) purely for
-  wayfinding back to `/`.
+- **App shell header**: sticky, `--surface`, `1px solid --line` bottom edge
+  plus a soft `0 2px 8px -4px` shadow (dark-tinted on slate, slate-tinted
+  on paper). Compact wordmark link on every route. Trailing **theme
+  toggle**: 36×36 icon button, cycle Dark → Light → System (moon / sun /
+  monitor). `aria-label` and `title` `Theme: Dark|Light|System`, plus a
+  visually-hidden `aria-live="polite"`. Icon swap instant — no extra
+  motion. Tool pages: Back link then the toggle.
 - **Home**: left-aligned hero block (wordmark at `--text-hero`, tagline,
-  trust-pill row, then the origin note directly under the pills), generous
+  trust-pill row, theme-persistence sentence, then the origin note), generous
   top/bottom space, then four native `<details>` groups (Text, IDs & time,
   Files, Diagrams). Each group header is a raised `--surface` band with a
   `--line-strong` ring (brass ring on hover/focus) and display type at
@@ -313,23 +311,20 @@ there.
   wiring (untouched — this file only adds presentation).
 - Focus-visible state is a solid 2px outline everywhere, never
   color-only.
-- Contrast checked against the light surfaces above (see **Color**) —
-  every text role clears 4.5:1 on the surface it actually appears on.
+- Contrast checked against both token sets (see **Color**) — every text
+  role clears 4.5:1 on the surface it actually appears on.
 - Respects `prefers-reduced-motion: reduce` — the three transitions above
   are removed, not slowed, and nothing else in this system depends on
   motion to convey state (fields still change color/content instantly).
 
 ## Explicitly out of scope
 
-No dark/light toggle and no `prefers-color-scheme` auto-switching — either
-would mean maintaining and re-verifying two token sets indefinitely, which
-nobody has asked for; a toggle would also need a persisted preference,
-which `docs/privacy.md` forbids. One committed light system, applied
-everywhere, per Operate's "same button shape, same form-control
-vocabulary" rule. If a future request wants system-aware theming, that is
-new scope, not a gap in this pass — flag it rather than half-building it.
+Custom palettes, URL-based theme (`/light`, `?theme=`), and persisting
+accordion or tool state remain out of scope. Theme persistence is the
+`gjb-theme` enum only (`docs/privacy.md`).
 
-No per-tool visual variation beyond content.
+No per-tool visual variation beyond content. Mermaid/PlantUML follow the
+resolved app theme; PDF/SVG→image rasters do not.
 
 ## Process note
 
@@ -388,8 +383,9 @@ CSS (`#f7f5ed`/`#fffcf5`) — this file's Color section had drifted from the
 shipped values; it's corrected here, not re-litigated. Icons gained one
 scoped exception: Lucide `Copy`/`Trash2` for generic in-tool actions,
 alongside (not replacing) the authored SVG chevron for navigation. Home,
-mode, direction thesis, fonts, spacing, motion budget, and the no-toggle
-rule are all unchanged by this pass. `.impeccable/design.json` still
+mode, direction thesis, fonts, spacing, and motion budget were unchanged
+by that pass. Theme toggle + cool-slate default landed later (see
+`docs/superpowers/specs/2026-08-12-theme-design.md`). `.impeccable/design.json` still
 references the pre-rename token names and the old background hex in a few
 CSS-snippet examples and its `colorMeta.bg.canonical` field; this file is
 the source of truth going forward; the sidecar can be regenerated

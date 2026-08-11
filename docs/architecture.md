@@ -8,6 +8,7 @@ Static CSR SPA built with React + Vite + TypeScript. No backend. Hosted as stati
 
 - Brand: **GJB Toolbox** (primary identity in chrome)
 - Navigation: home + links/list of tools from registry
+- Theme: `ThemeProvider` + header cycle control. Blocking script in `index.html` sets `html[data-theme]` (`dark` | `light`, never `system`) before paint. Preference in `localStorage['gjb-theme']` only. See `privacy.md` and `superpowers/specs/2026-08-12-theme-design.md`
 - Main outlet for routed tool pages
 
 ## Routing
@@ -48,7 +49,7 @@ testing/
 
 ## Privacy coupling
 
-Architecture forbids persistence layers and telemetry SDKs. See `privacy.md`.
+Architecture forbids persistence layers and telemetry SDKs except the `gjb-theme` key. See `privacy.md`.
 
 ## Deploy
 

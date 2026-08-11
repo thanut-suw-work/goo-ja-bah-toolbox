@@ -52,17 +52,26 @@ describe('mapEngineError', () => {
 })
 
 describe('engine load wiring', () => {
+  const here = path.dirname(fileURLToPath(import.meta.url))
+  const src = readFileSync(
+    path.resolve(here, '../../../../src/tools/plantuml/render.ts'),
+    'utf8',
+  )
+
   it('loads plantuml.js as a URL asset so Vite cannot minify TeaVM', () => {
-    const here = path.dirname(fileURLToPath(import.meta.url))
-    const src = readFileSync(
-      path.resolve(here, '../../../../src/tools/plantuml/render.ts'),
-      'utf8',
-    )
     expect(src).toMatch(
       /import\(['"]@plantuml\/core\/plantuml\.js\?url['"]\)/,
     )
     expect(src).not.toMatch(
       /import\(['"]@plantuml\/core\/plantuml\.js['"]\)/,
+    )
+  })
+
+  it('passes { dark } into renderToString', () => {
+    expect(src).toMatch(/renderToStringP\([\s\S]*dark/)
+    expect(src).toMatch(/\{\s*dark\s*\}/)
+    expect(src).toMatch(
+      /export function renderBlock\(\s*lines:\s*string\[\],\s*startLine:\s*number,\s*dark:\s*boolean/,
     )
   })
 })

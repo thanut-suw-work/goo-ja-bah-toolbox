@@ -48,6 +48,13 @@ describe('HomePage', () => {
     ).toBeNull()
   })
 
+  it('states that theme stays and paste does not', () => {
+    renderHome()
+    expect(document.body.textContent).toMatch(
+      /Theme choice stays in this browser\. Everything you paste still dies on refresh\./,
+    )
+  })
+
   it('lets the user collapse a group', async () => {
     const user = userEvent.setup()
     renderHome()

@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { ActionBar, IoPanel } from '@/tools/shared/IoPanels'
 import { svgToRaster } from '@/tools/shared/svgToRaster'
 import { DiagramLightbox } from '@/tools/shared/DiagramLightbox'
+import { useTheme } from '@/app/ThemeProvider'
 import { formatIncludeError, parsePlantUml } from './parse'
 import { renderBlock } from './render'
 
@@ -44,10 +45,17 @@ export function PlantumlTool() {
   const [fatal, setFatal] = useState<Error | null>(null)
   const [viewing, setViewing] = useState<number | null>(null)
 
+  const { resolved } = useTheme()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const pendingUrlsRef = useRef<Set<string>>(new Set())
   const aliveRef = useRef(true)
   const busyRef = useRef(false)
+  const sourceRef = useRef(source)
+  const resultsRef = useRef(results)
+  const resolvedRef = useRef(resolved)
+  sourceRef.current = source
+  resultsRef.current = results
+  resolvedRef.current = resolved
 
   useEffect(() => {
     aliveRef.current = true
@@ -58,6 +66,12 @@ export function PlantumlTool() {
       pendingUrls.clear()
     }
   }, [])
+
+  useEffect(() => {
+    void visualize('theme')
+    // Restyle existing diagrams only when resolved theme flips.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resolved])
 
   if (fatal) throw fatal
 
@@ -102,22 +116,30 @@ export function PlantumlTool() {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  async function onVisualize() {
-    if (!source.trim() || busyRef.current) return
+  async function visualize(mode: 'click' | 'theme') {
+    const src = sourceRef.current
+    if (!src.trim() || busyRef.current) return
+    if (mode === 'theme' && resultsRef.current.length === 0) return
     busyRef.current = true
-    revokeAll()
-    setResults([])
-    setPngBusy(new Set())
-    setViewing(null)
+    if (mode === 'click') {
+      revokeAll()
+      setResults([])
+      setPngBusy(new Set())
+      setViewing(null)
+    }
     setBusy(true)
     try {
-      const blocks = parsePlantUml(source)
+      const blocks = parsePlantUml(src)
       const acc: DiagramResult[] = []
       for (const block of blocks) {
         if (block.includeHit) {
           acc.push({ ok: false, error: formatIncludeError(block.includeHit) })
         } else {
-          const r = await renderBlock(block.lines, block.startLine)
+          const r = await renderBlock(
+            block.lines,
+            block.startLine,
+            resolvedRef.current === 'dark',
+          )
           acc.push(
             r.ok
               ? { ok: true, svg: r.svg, pngError: null }
@@ -134,6 +156,10 @@ export function PlantumlTool() {
       busyRef.current = false
       if (aliveRef.current) setBusy(false)
     }
+  }
+
+  function onVisualize() {
+    void visualize('click')
   }
 
   function onDownloadSvg(index: number, svg: string) {

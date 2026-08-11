@@ -5,12 +5,14 @@ export type EngineRenderResult =
 const RENDER_TIMEOUT_MS = 30_000
 
 /** Re-asserted before every render. Gantt must not use width:100% (lightbox shrinks it). */
-const ENGINE_INIT = {
-  startOnLoad: false,
-  securityLevel: 'strict',
-  theme: 'default',
-  gantt: { useMaxWidth: false },
-} as const
+function engineInit(theme: 'dark' | 'default') {
+  return {
+    startOnLoad: false,
+    securityLevel: 'strict' as const,
+    theme,
+    gantt: { useMaxWidth: false },
+  }
+}
 
 type MermaidApi = {
   initialize: (config: Record<string, unknown>) => void
@@ -57,7 +59,7 @@ function enqueue<T>(job: () => Promise<T>): Promise<T> {
 async function loadEngineOnce(): Promise<MermaidApi> {
   const mod = await import('mermaid')
   const mermaid = (mod.default ?? mod) as MermaidApi
-  mermaid.initialize(ENGINE_INIT)
+  mermaid.initialize(engineInit('default'))
   return mermaid
 }
 
@@ -92,11 +94,12 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 export function renderBlock(
   text: string,
   startLine: number,
+  theme: 'dark' | 'default',
 ): Promise<EngineRenderResult> {
   return enqueue(async () => {
     try {
       const mermaid = await loadEngine()
-      mermaid.initialize(ENGINE_INIT)
+      mermaid.initialize(engineInit(theme))
       const id = `mmd-${++renderSeq}`
       const { svg } = await withTimeout(
         mermaid.render(id, text),

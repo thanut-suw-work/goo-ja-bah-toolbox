@@ -2,6 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      /* Keep in sync with src/app/theme.ts */
+      (function () {
+        var KEY = 'gjb-theme'
+        var raw = null
+        try {
+          raw = localStorage.getItem(KEY)
+        } catch (e) {}
+        var pref =
+          raw === 'light' || raw === 'system' || raw === 'dark' ? raw : 'dark'
+        var prefersLight = false
+        try {
+          prefersLight = window.matchMedia(
+            '(prefers-color-scheme: light)',
+          ).matches
+        } catch (e) {}
+        var resolved = pref === 'system' ? (prefersLight ? 'light' : 'dark') : pref
+        var root = document.documentElement
+        root.setAttribute('data-theme', resolved)
+        root.style.colorScheme = resolved
+        root.style.backgroundColor = resolved === 'light' ? '#f7f5ed' : '#0d1117'
+      })()
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GJB Toolbox</title>

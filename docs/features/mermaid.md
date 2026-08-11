@@ -22,7 +22,7 @@ View Mermaid source in the browser. Paste or open one file, click **Visualize**,
 
 ## Engine
 
-- npm `mermaid` ^11 (MIT). Dynamic `import('mermaid')` then `initialize({ startOnLoad: false, securityLevel: 'strict' })` and `render(id, text)`. Re-assert strict + `theme: 'default'` before each render so mermaid’s default `secure` keys block directive overrides of `securityLevel`. Never `registerIconPacks`. Never `loose` / `antiscript`. Sequential queue. 30s timeout per diagram.
+- npm `mermaid` ^11 (MIT). Dynamic `import('mermaid')` then `initialize({ startOnLoad: false, securityLevel: 'strict' })` and `render(id, text)`. Re-assert strict + `theme: 'dark' | 'default'` from the app’s **resolved** theme before each render so mermaid’s default `secure` keys block directive overrides of `securityLevel`. Never `registerIconPacks`. Never `loose` / `antiscript`. Sequential queue. 30s timeout per diagram. If diagrams are already on screen and the resolved theme flips, re-render from current source in place (do not clear results first).
 - Diagram `%%{init}%%` / YAML `---` theme and layout still apply (non-secure keys).
 - Lazy chunk: only `/tools/mermaid` downloads the engine. No CDN at runtime.
 - Shared PNG: `svgToRaster(svg, { format: 'png', scale: 1 })` from `src/tools/shared/svgToRaster.ts`. This tool must not reimplement rasterization.

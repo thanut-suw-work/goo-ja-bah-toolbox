@@ -2,9 +2,16 @@ import '@testing-library/jest-dom/vitest'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import type { ReactElement } from 'react'
+import { ThemeProvider } from '@/app/ThemeProvider'
+import { ThemeToggle } from '@/app/ThemeToggle'
 import { MermaidTool } from '@/tools/mermaid/MermaidTool'
 import { renderBlock } from '@/tools/mermaid/render'
 import { svgToRaster } from '@/tools/shared/svgToRaster'
+
+function renderTool(ui: ReactElement) {
+  return render(<ThemeProvider>{ui}</ThemeProvider>)
+}
 
 vi.mock('@/tools/mermaid/render', () => ({
   renderBlock: vi.fn(async () => {
@@ -18,6 +25,7 @@ vi.mock('@/tools/shared/svgToRaster', () => ({
 
 describe('MermaidTool', () => {
   beforeEach(() => {
+    localStorage.clear()
     vi.mocked(renderBlock).mockReset()
     vi.mocked(svgToRaster).mockReset()
     vi.stubGlobal('URL', {
@@ -38,14 +46,14 @@ describe('MermaidTool', () => {
 
   it('disables Visualize when the source is empty or whitespace', async () => {
     const user = userEvent.setup()
-    render(<MermaidTool />)
+    renderTool(<MermaidTool />)
     expect(screen.getByRole('button', { name: 'Visualize' })).toBeDisabled()
     await user.type(screen.getByLabelText('Mermaid source'), '   ')
     expect(screen.getByRole('button', { name: 'Visualize' })).toBeDisabled()
   })
 
   it('accepts mmd and markdown files', () => {
-    render(<MermaidTool />)
+    renderTool(<MermaidTool />)
     const input = document.getElementById('mermaid-file')
     expect(input).toHaveAttribute(
       'accept',
@@ -54,7 +62,7 @@ describe('MermaidTool', () => {
   })
 
   it('shows a tip for the accepted .mmd and fence pattern', () => {
-    render(<MermaidTool />)
+    renderTool(<MermaidTool />)
     expect(
       screen.getByText(/each fence is one diagram/i),
     ).toBeInTheDocument()
@@ -77,7 +85,7 @@ describe('MermaidTool', () => {
       new Blob(['png'], { type: 'image/png' }),
     )
     const user = userEvent.setup()
-    render(<MermaidTool />)
+    renderTool(<MermaidTool />)
     await user.type(
       screen.getByLabelText('Mermaid source'),
       'flowchart TD{Enter}  A-->B',
@@ -98,7 +106,7 @@ describe('MermaidTool', () => {
     })
     vi.mocked(svgToRaster).mockRejectedValue(new Error('remote URL not loaded'))
     const user = userEvent.setup()
-    render(<MermaidTool />)
+    renderTool(<MermaidTool />)
     await user.type(screen.getByLabelText('Mermaid source'), 'flowchart TD')
     await user.click(screen.getByRole('button', { name: 'Visualize' }))
     await user.click(await screen.findByRole('button', { name: 'Download PNG' }))
@@ -114,7 +122,7 @@ describe('MermaidTool', () => {
       svg: '<svg xmlns="http://www.w3.org/2000/svg"><title>drawn</title></svg>',
     })
     const user = userEvent.setup()
-    render(<MermaidTool />)
+    renderTool(<MermaidTool />)
     await user.type(screen.getByLabelText('Mermaid source'), 'flowchart TD')
     await user.click(screen.getByRole('button', { name: 'Visualize' }))
     await user.click(await screen.findByRole('button', { name: 'View' }))
@@ -132,7 +140,7 @@ describe('MermaidTool', () => {
       new Blob(['png'], { type: 'image/png' }),
     )
     const user = userEvent.setup()
-    render(<MermaidTool />)
+    renderTool(<MermaidTool />)
     await user.type(screen.getByLabelText('Mermaid source'), 'flowchart TD')
     await user.click(screen.getByRole('button', { name: 'Visualize' }))
     await user.click(
@@ -143,5 +151,31 @@ describe('MermaidTool', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Download PNG' }))
     expect(svgToRaster).toHaveBeenCalledWith(svg, { format: 'png', scale: 1 })
+  })
+
+  it('re-renders existing diagrams when theme cycles without a Visualize click', async () => {
+    vi.mocked(renderBlock).mockResolvedValue({
+      ok: true,
+      svg: '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
+    })
+    const user = userEvent.setup()
+    render(
+      <ThemeProvider>
+        <ThemeToggle />
+        <MermaidTool />
+      </ThemeProvider>,
+    )
+    await user.type(screen.getByLabelText('Mermaid source'), 'flowchart TD')
+    await user.click(screen.getByRole('button', { name: 'Visualize' }))
+    await screen.findByRole('button', { name: 'Download SVG' })
+    const callsAfterVisualize = vi.mocked(renderBlock).mock.calls.length
+    await user.click(screen.getByRole('button', { name: 'Theme: Dark' }))
+    await vi.waitFor(() => {
+      expect(vi.mocked(renderBlock).mock.calls.length).toBeGreaterThan(
+        callsAfterVisualize,
+      )
+    })
+    const last = vi.mocked(renderBlock).mock.calls.at(-1)
+    expect(last?.[2]).toBe('default')
   })
 })

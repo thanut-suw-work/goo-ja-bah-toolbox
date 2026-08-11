@@ -4,6 +4,30 @@
 
 @layer base {
   :root {
+    /* Cool slate dark default — brass primary */
+    --background: 216 28% 7%; /* #0d1117 */
+    --foreground: 210 35% 93%; /* #e6edf3 */
+    --card: 215 21% 11%; /* #161b22 */
+    --card-foreground: 210 35% 93%;
+    --popover: 215 21% 11%;
+    --popover-foreground: 210 35% 93%;
+    --primary: 36 66% 55%;
+    --primary-foreground: 40 55% 9%;
+    --secondary: 215 14% 16%;
+    --secondary-foreground: 210 35% 93%;
+    --muted: 215 14% 16%;
+    --muted-foreground: 214 10% 61%; /* #8b949e */
+    --accent: 215 14% 16%;
+    --accent-foreground: 210 35% 93%;
+    --destructive: 2 84% 63%; /* #f85149 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 14% 22%;
+    --input: 215 14% 22%;
+    --ring: 36 66% 55%;
+    --radius: 0.5rem;
+  }
+
+  html[data-theme='light'] {
     /* Warm pale-yellow light — eye comfort; brass primary */
     --background: 42 35% 96%; /* ~#f7f5ed */
     --foreground: 30 12% 12%;
@@ -11,8 +35,8 @@
     --card-foreground: 30 12% 12%;
     --popover: 42 40% 99%;
     --popover-foreground: 30 12% 12%;
-    --primary: 36 66% 55%; /* brass fill */
-    --primary-foreground: 40 55% 9%; /* accent-ink */
+    --primary: 36 66% 55%;
+    --primary-foreground: 40 55% 9%;
     --secondary: 42 25% 93%;
     --secondary-foreground: 30 12% 12%;
     --muted: 42 25% 93%;
@@ -24,7 +48,6 @@
     --border: 40 18% 84%;
     --input: 40 18% 84%;
     --ring: 28 75% 36%;
-    --radius: 0.5rem;
   }
 
   * {
@@ -35,23 +58,23 @@
 /* GJB Toolbox — Operate-mode visual system. See DESIGN.md for rationale. */
 
 :root {
-  --bg: #f7f5ed;
-  --surface: #fffcf5;
+  --bg: #0d1117;
+  --surface: #161b22;
 
-  --line: rgba(15, 23, 42, 0.12);
-  --line-strong: rgba(15, 23, 42, 0.22);
+  --line: rgba(230, 237, 243, 0.12);
+  --line-strong: rgba(230, 237, 243, 0.22);
 
-  --text-primary: #14171d;
-  --text-secondary: #4b515c;
-  --text-tertiary: #6b7280;
+  --text-primary: #e6edf3;
+  --text-secondary: #b1bac4;
+  --text-tertiary: #8b949e;
 
   --brass: #d99a3f;
   --brass-hover: #e7ab55;
-  --brass-strong: #a35a17;
+  --brass-strong: #e7ab55;
   --brass-ink: #241a08;
 
-  --danger: #b23a26;
-  --success: #2f7a4d;
+  --danger: #f85149;
+  --success: #3fb950;
 
   --focus-ring: var(--brass-strong);
 
@@ -80,6 +103,30 @@
   --radius-sm: 6px;
   --radius-md: 12px;
 
+  color-scheme: dark;
+}
+
+html[data-theme='light'] {
+  --bg: #f7f5ed;
+  --surface: #fffcf5;
+
+  --line: rgba(15, 23, 42, 0.12);
+  --line-strong: rgba(15, 23, 42, 0.22);
+
+  --text-primary: #14171d;
+  --text-secondary: #4b515c;
+  --text-tertiary: #6b7280;
+
+  --brass: #d99a3f;
+  --brass-hover: #e7ab55;
+  --brass-strong: #a35a17;
+  --brass-ink: #241a08;
+
+  --danger: #b23a26;
+  --success: #2f7a4d;
+
+  --focus-ring: var(--brass-strong);
+
   color-scheme: light;
 }
 
@@ -104,12 +151,12 @@ body {
   background-image:
     radial-gradient(
       ellipse 900px 560px at 8% -12%,
-      rgba(217, 154, 63, 0.12),
+      rgba(110, 130, 160, 0.1),
       transparent 60%
     ),
     radial-gradient(
       ellipse 900px 700px at 100% 110%,
-      rgba(75, 92, 115, 0.1),
+      rgba(0, 0, 0, 0.35),
       transparent 60%
     );
   background-repeat: no-repeat;
@@ -161,6 +208,10 @@ button {
   z-index: 10;
   background: var(--surface);
   border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 8px -4px rgba(0, 0, 0, 0.45);
+}
+
+html[data-theme='light'] .app-shell__header {
   box-shadow: 0 2px 8px -4px rgba(15, 23, 42, 0.1);
 }
 
@@ -172,6 +223,57 @@ button {
   max-width: 960px;
   margin: 0 auto;
   padding: var(--space-3) var(--space-6);
+}
+
+.app-shell__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--brass-strong);
+  cursor: pointer;
+}
+
+.theme-toggle svg {
+  display: block;
+}
+
+.theme-toggle:hover {
+  border-color: var(--brass-strong);
+  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+}
+
+.theme-toggle:active {
+  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .shell-back {
@@ -282,12 +384,33 @@ button {
   padding: var(--space-1) var(--space-3);
 }
 
+.home-hero__theme-note {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  margin: var(--space-4) 0 0;
+  max-width: 62ch;
+}
+
 .home-hero__origin {
   font-size: var(--text-sm);
   color: var(--text-tertiary);
   margin: var(--space-4) 0 0;
   width: max-content;
   max-width: 100%;
+}
+
+html[data-theme='light'] body {
+  background-image:
+    radial-gradient(
+      ellipse 900px 560px at 8% -12%,
+      rgba(217, 154, 63, 0.12),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 900px 700px at 100% 110%,
+      rgba(75, 92, 115, 0.1),
+      transparent 60%
+    );
 }
 
 .tool-list {

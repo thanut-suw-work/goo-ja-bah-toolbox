@@ -58,6 +58,10 @@ export function HomePage() {
             </li>
           ))}
         </ul>
+        <p className="home-hero__theme-note">
+          Theme choice stays in this browser. Everything you paste still dies
+          on refresh.
+        </p>
         <p className="home-hero__origin">
           I built this after getting stuck on apps that only accept tax invoices as images — I had a PDF...
         </p>

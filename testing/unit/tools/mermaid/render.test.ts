@@ -57,4 +57,10 @@ describe('engine load wiring', () => {
   it('disables gantt useMaxWidth so wide charts keep pixel size', () => {
     expect(src).toMatch(/gantt:\s*\{[^}]*useMaxWidth:\s*false/)
   })
+
+  it('re-asserts theme from the renderBlock argument', () => {
+    expect(src).toMatch(
+      /export function renderBlock\(\s*text:\s*string,\s*startLine:\s*number,\s*theme:\s*'dark'\s*\|\s*'default'/,
+    )
+  })
 })

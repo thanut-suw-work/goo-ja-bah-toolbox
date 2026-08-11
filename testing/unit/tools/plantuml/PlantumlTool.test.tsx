@@ -2,9 +2,16 @@ import '@testing-library/jest-dom/vitest'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import type { ReactElement } from 'react'
+import { ThemeProvider } from '@/app/ThemeProvider'
+import { ThemeToggle } from '@/app/ThemeToggle'
 import { PlantumlTool } from '@/tools/plantuml/PlantumlTool'
 import { renderBlock } from '@/tools/plantuml/render'
 import { svgToRaster } from '@/tools/shared/svgToRaster'
+
+function renderTool(ui: ReactElement) {
+  return render(<ThemeProvider>{ui}</ThemeProvider>)
+}
 
 vi.mock('@/tools/plantuml/render', () => ({
   renderBlock: vi.fn(async () => {
@@ -18,6 +25,7 @@ vi.mock('@/tools/shared/svgToRaster', () => ({
 
 describe('PlantumlTool', () => {
   beforeEach(() => {
+    localStorage.clear()
     vi.mocked(renderBlock).mockReset()
     vi.mocked(svgToRaster).mockReset()
     vi.stubGlobal('URL', {
@@ -38,7 +46,7 @@ describe('PlantumlTool', () => {
 
   it('disables Visualize when the source is empty or whitespace', async () => {
     const user = userEvent.setup()
-    render(<PlantumlTool />)
+    renderTool(<PlantumlTool />)
     const button = screen.getByRole('button', { name: 'Visualize' })
     expect(button).toBeDisabled()
     await user.type(screen.getByLabelText('PlantUML source'), '   ')
@@ -47,7 +55,7 @@ describe('PlantumlTool', () => {
 
   it('shows include error copy without calling the engine', async () => {
     const user = userEvent.setup()
-    render(<PlantumlTool />)
+    renderTool(<PlantumlTool />)
     await user.type(
       screen.getByLabelText('PlantUML source'),
       '@startuml{Enter}!include common.puml{Enter}@enduml',
@@ -69,7 +77,7 @@ describe('PlantumlTool', () => {
       new Blob(['png'], { type: 'image/png' }),
     )
     const user = userEvent.setup()
-    render(<PlantumlTool />)
+    renderTool(<PlantumlTool />)
     await user.type(
       screen.getByLabelText('PlantUML source'),
       '@startuml{Enter}Alice -> Bob{Enter}@enduml',
@@ -94,7 +102,7 @@ describe('PlantumlTool', () => {
     })
     vi.mocked(svgToRaster).mockRejectedValue(new Error('remote URL not loaded'))
     const user = userEvent.setup()
-    render(<PlantumlTool />)
+    renderTool(<PlantumlTool />)
     await user.type(
       screen.getByLabelText('PlantUML source'),
       '@startuml{Enter}A -> B{Enter}@enduml',
@@ -116,7 +124,7 @@ describe('PlantumlTool', () => {
       svg: '<svg xmlns="http://www.w3.org/2000/svg"><title>drawn</title></svg>',
     })
     const user = userEvent.setup()
-    render(<PlantumlTool />)
+    renderTool(<PlantumlTool />)
     await user.type(
       screen.getByLabelText('PlantUML source'),
       '@startuml{Enter}A -> B{Enter}@enduml',
@@ -137,7 +145,7 @@ describe('PlantumlTool', () => {
       new Blob(['png'], { type: 'image/png' }),
     )
     const user = userEvent.setup()
-    render(<PlantumlTool />)
+    renderTool(<PlantumlTool />)
     await user.type(
       screen.getByLabelText('PlantUML source'),
       '@startuml{Enter}A -> B{Enter}@enduml',
@@ -149,5 +157,34 @@ describe('PlantumlTool', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Download PNG' }))
     expect(svgToRaster).toHaveBeenCalledWith(svg, { format: 'png', scale: 1 })
+  })
+
+  it('re-renders existing diagrams when theme cycles without a Visualize click', async () => {
+    vi.mocked(renderBlock).mockResolvedValue({
+      ok: true,
+      svg: '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
+    })
+    const user = userEvent.setup()
+    render(
+      <ThemeProvider>
+        <ThemeToggle />
+        <PlantumlTool />
+      </ThemeProvider>,
+    )
+    await user.type(
+      screen.getByLabelText('PlantUML source'),
+      '@startuml{Enter}A -> B{Enter}@enduml',
+    )
+    await user.click(screen.getByRole('button', { name: 'Visualize' }))
+    await screen.findByRole('button', { name: 'Download SVG' })
+    const callsAfterVisualize = vi.mocked(renderBlock).mock.calls.length
+    await user.click(screen.getByRole('button', { name: 'Theme: Dark' }))
+    await vi.waitFor(() => {
+      expect(vi.mocked(renderBlock).mock.calls.length).toBeGreaterThan(
+        callsAfterVisualize,
+      )
+    })
+    const last = vi.mocked(renderBlock).mock.calls.at(-1)
+    expect(last?.[2]).toBe(false)
   })
 })

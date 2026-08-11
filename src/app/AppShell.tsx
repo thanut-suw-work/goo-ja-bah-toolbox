@@ -1,5 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { Toaster } from '@/components/ui/sonner'
+import { ThemeToggle } from './ThemeToggle'
 
 export function AppShell() {
   const { pathname } = useLocation()
@@ -38,26 +39,29 @@ export function AppShell() {
             </svg>
             <span className="brand__word">GJB Toolbox</span>
           </Link>
-          {onToolPage ? (
-            <Link to="/" className="shell-back">
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M10 3.5L5 8l5 4.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              back
-            </Link>
-          ) : null}
+          <div className="app-shell__actions">
+            {onToolPage ? (
+              <Link to="/" className="shell-back">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M10 3.5L5 8l5 4.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                back
+              </Link>
+            ) : null}
+            <ThemeToggle />
+          </div>
         </div>
       </header>
       <main className="app-shell__main">
