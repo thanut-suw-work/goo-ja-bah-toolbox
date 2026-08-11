@@ -117,6 +117,7 @@ export function UtfEncodingTool() {
             <option value="utf-8">UTF-8</option>
             <option value="utf-16le">UTF-16LE</option>
             <option value="utf-32le">UTF-32LE</option>
+            <option value="code-points">Code points</option>
           </select>
         </label>
         <label className="flex items-center gap-2 text-sm">
