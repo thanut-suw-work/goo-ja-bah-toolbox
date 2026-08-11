@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { Download, Trash2 } from 'lucide-react'
+import { Download, Maximize2, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { ActionBar, IoPanel } from '@/tools/shared/IoPanels'
 import { svgToRaster } from '@/tools/shared/svgToRaster'
+import { DiagramLightbox } from './DiagramLightbox'
 import { formatIncludeError, parsePlantUml } from './parse'
 import { renderBlock } from './render'
 
@@ -41,10 +42,12 @@ export function PlantumlTool() {
   const [results, setResults] = useState<DiagramResult[]>([])
   const [pngBusy, setPngBusy] = useState<Set<number>>(() => new Set())
   const [fatal, setFatal] = useState<Error | null>(null)
+  const [viewing, setViewing] = useState<number | null>(null)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const pendingUrlsRef = useRef<Set<string>>(new Set())
   const aliveRef = useRef(true)
+  const busyRef = useRef(false)
 
   useEffect(() => {
     aliveRef.current = true
@@ -80,6 +83,7 @@ export function PlantumlTool() {
       setFilename(file.name)
       setStem(stemOf(file.name))
       setResults([])
+      setViewing(null)
       revokeAll()
     } catch {
       setReadError('Could not read file')
@@ -93,15 +97,18 @@ export function PlantumlTool() {
     setReadError(null)
     setResults([])
     setPngBusy(new Set())
+    setViewing(null)
     revokeAll()
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
   async function onVisualize() {
-    if (!source.trim() || busy) return
+    if (!source.trim() || busyRef.current) return
+    busyRef.current = true
     revokeAll()
     setResults([])
     setPngBusy(new Set())
+    setViewing(null)
     setBusy(true)
     try {
       const blocks = parsePlantUml(source)
@@ -124,6 +131,7 @@ export function PlantumlTool() {
         setFatal(e instanceof Error ? e : new Error(String(e)))
       }
     } finally {
+      busyRef.current = false
       if (aliveRef.current) setBusy(false)
     }
   }
@@ -168,6 +176,7 @@ export function PlantumlTool() {
   }
 
   const visualizeDisabled = busy || source.trim().length === 0
+  const viewed = viewing !== null ? results[viewing] : undefined
 
   return (
     <div className="space-y-6">
@@ -225,6 +234,14 @@ export function PlantumlTool() {
                   type="button"
                   variant="outline"
                   size="sm"
+                  onClick={() => setViewing(index)}
+                >
+                  <Maximize2 /> View
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => onDownloadSvg(index, result.svg)}
                 >
                   <Download /> Download SVG
@@ -244,10 +261,14 @@ export function PlantumlTool() {
         >
           {result.ok ? (
             <>
-              <div
-                className="overflow-auto p-4"
-                dangerouslySetInnerHTML={{ __html: result.svg }}
-              />
+              <button
+                type="button"
+                aria-label={`View diagram ${index + 1}`}
+                className="block max-h-[min(70vh,36rem)] w-full cursor-zoom-in overflow-hidden p-4 text-left"
+                onClick={() => setViewing(index)}
+              >
+                <div dangerouslySetInnerHTML={{ __html: result.svg }} />
+              </button>
               {result.pngError ? (
                 <p role="alert" className="px-4 pb-4 text-sm text-destructive">
                   {result.pngError}
@@ -261,6 +282,13 @@ export function PlantumlTool() {
           )}
         </IoPanel>
       ))}
+
+      <DiagramLightbox
+        open={Boolean(viewed?.ok)}
+        title={viewing !== null ? `Diagram ${viewing + 1}` : ''}
+        svg={viewed?.ok ? viewed.svg : ''}
+        onClose={() => setViewing(null)}
+      />
     </div>
   )
 }

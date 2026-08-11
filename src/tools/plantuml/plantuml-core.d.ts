@@ -8,6 +8,7 @@ declare module '@plantuml/core' {
     lines: string[],
     onSuccess: (svg: string) => void,
     onError: (message: string) => void,
+    options?: { dark?: boolean },
   ): void
 }
 
@@ -21,5 +22,6 @@ declare module '@plantuml/core/plantuml.js' {
     lines: string[],
     onSuccess: (svg: string) => void,
     onError: (message: string) => void,
+    options?: { dark?: boolean },
   ): void
 }

@@ -21,4 +21,29 @@ describe('mapEngineError', () => {
     expect(r.line).toBe(4)
     expect(r.error).toBe('Line 4: Error line 4')
   })
+
+  it('stringifies a non-string engine payload instead of throwing', () => {
+    const r = mapEngineError(undefined, 1)
+    expect(r.line).toBeNull()
+    expect(r.error.length).toBeGreaterThan(0)
+  })
+
+  it('rewrites a TeaVM monitor crash into an engine-card message', () => {
+    const r = mapEngineError(
+      `can't access property "bGH", e is undefined`,
+      1,
+    )
+    expect(r.line).toBeNull()
+    expect(r.error).toMatch(/PlantUML engine crashed/i)
+    expect(r.error).toContain('bGH')
+  })
+
+  it('rewrites a Chromium TeaVM TypeError the same way', () => {
+    const r = mapEngineError(
+      `Cannot read properties of undefined (reading 'bGH')`,
+      1,
+    )
+    expect(r.line).toBeNull()
+    expect(r.error).toMatch(/PlantUML engine crashed/i)
+  })
 })

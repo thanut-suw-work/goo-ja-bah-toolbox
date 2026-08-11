@@ -595,3 +595,31 @@ button {
   color: var(--brass-strong);
   font-size: var(--text-sm);
 }
+
+/* PlantUML lightbox — native <dialog>, tool-local. See DESIGN.md. */
+.plantuml-lightbox {
+  width: min(96vw, 100%);
+  height: min(96vh, 100%);
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  box-shadow: 0 8px 24px -8px rgba(15, 23, 42, 0.18);
+}
+
+.plantuml-lightbox::backdrop {
+  background: color-mix(in srgb, var(--bg) 40%, rgba(36, 26, 8, 0.5));
+}
+
+.plantuml-lightbox:focus {
+  outline: none;
+}
+
+.plantuml-lightbox:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}

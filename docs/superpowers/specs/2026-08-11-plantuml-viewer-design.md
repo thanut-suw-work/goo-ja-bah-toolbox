@@ -29,7 +29,7 @@ New toolbox tool: open or paste a PlantUML source file, click **Visualize**, see
 - Resolving `!include` / `!includeurl` / `!includesub` / `!import` / `!include_once` / `!include_many` from disk, extra attached files, or network
 - Bundled PlantUML stdlib / C4 / sprite packs
 - Live render, persistence, accounts, remote `plantuml.com` / Kroki
-- Custom pan/zoom library (native overflow scroll on the SVG)
+- Third-party pan/zoom library (`panzoom`, `react-zoom-pan-pinch`, …). Homemade CSS `translate`/`scale` inside a native `<dialog>` is in scope (see UI).
 - Diagram dark-mode toggle (`{ dark: true }` unused in MVP; engine default / light SVG)
 - Splitting on non-`@startuml` delimiters (`@startmindmap`, `@startgantt`, …). A file with **no** `@startuml` is one block (whole textarea) and may still render if the engine accepts it. Mixed files: text between `@startuml` blocks is discarded, including other `@start*` diagrams
 - JPEG/quality/scale controls on this page (see SVG to image spec)
@@ -70,6 +70,8 @@ Browser
        ├─ PlantumlTool.tsx
        ├─ parse.ts          # blocks + include scan + line numbers
        ├─ render.ts         # load engine once; sequential renderToString
+       ├─ panZoom.ts        # clamp / pan / wheel-around-cursor (no npm lib)
+       ├─ DiagramLightbox.tsx
        └─ shared/svgToRaster.ts   # SVG string → PNG blob
 ```
 
@@ -77,8 +79,10 @@ Browser
 |------|------|------------|
 | `parse.ts` | Split blocks; record `startLine`; find include directives | — |
 | `render.ts` | Script-inject viz; import engine; Promise API; one render at a time | `@plantuml/core` |
+| `panZoom.ts` | Clamp / pan / wheel-around-cursor math | — |
+| `DiagramLightbox.tsx` | Native `<dialog>`; pointer pan; wheel zoom | panZoom |
 | `svgToRaster.ts` | SVG → canvas blob; PlantUML uses PNG scale 1; JPEG/scale live in SVG to image | DOM canvas |
-| `PlantumlTool.tsx` | Source UI, Visualize, cards, downloads, URL revoke | parse, render, svgToRaster |
+| `PlantumlTool.tsx` | Source UI, Visualize, cards, lightbox, downloads, URL revoke | parse, render, svgToRaster, lightbox |
 
 Engine singleton for the page visit. Sequential `await` per block (do not parallelize TeaVM). Unmount: revoke any object URLs created for PNG (and SVG downloads if used).
 
@@ -113,8 +117,8 @@ Reuse `ToolLayout` (title **PlantUML**, short description: view `.puml` in the b
 ### Result cards (below, full width, file order)
 
 - Heading `Diagram 1`, `Diagram 2`, …
-- Success: inline SVG, container `overflow: auto` (native scroll)
-- Actions: **Download SVG**, **Download PNG** (PNG button disabled/busy while that card rasterizes)
+- Success: clipped SVG preview (`max-height`, overflow hidden). **View** (and clicking the preview) opens a native `<dialog>` lightbox. Inside: left-drag pan, wheel zoom toward cursor (clamp 0.25–4). No pan/zoom npm package. **Esc** / backdrop / **Close**. Transform resets on close and on a new Visualize. Downloads are the original SVG, not the zoomed view.
+- Actions: **View**, **Download SVG**, **Download PNG** (PNG button disabled/busy while that card rasterizes)
 - Filenames: `{stem}-{n}.svg` / `{stem}-{n}.png`. `stem` = basename without extension of the last successfully read file; paste-only or after **Clear** → `diagram`. Editing the textarea after a pick keeps that stem until Clear or a new file pick
 - Failure: no SVG; `role="alert"` on **that** card; siblings unchanged
 - PNG raster fail: keep SVG + SVG download; alert `Could not create PNG: …`

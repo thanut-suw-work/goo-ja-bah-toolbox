@@ -24,6 +24,12 @@ describe('PlantumlTool', () => {
       createObjectURL: vi.fn(() => 'blob:plantuml-test'),
       revokeObjectURL: vi.fn(),
     })
+    HTMLDialogElement.prototype.showModal = function showModal() {
+      this.setAttribute('open', '')
+    }
+    HTMLDialogElement.prototype.close = function close() {
+      this.removeAttribute('open')
+    }
   })
 
   afterEach(() => {
@@ -102,5 +108,46 @@ describe('PlantumlTool', () => {
     expect(
       screen.getByRole('button', { name: 'Download SVG' }),
     ).toBeEnabled()
+  })
+
+  it('opens a lightbox from View and closes it', async () => {
+    vi.mocked(renderBlock).mockResolvedValue({
+      ok: true,
+      svg: '<svg xmlns="http://www.w3.org/2000/svg"><title>drawn</title></svg>',
+    })
+    const user = userEvent.setup()
+    render(<PlantumlTool />)
+    await user.type(
+      screen.getByLabelText('PlantUML source'),
+      '@startuml{Enter}A -> B{Enter}@enduml',
+    )
+    await user.click(screen.getByRole('button', { name: 'Visualize' }))
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveAttribute('aria-modal', 'true')
+    expect(dialog).toHaveTextContent('Diagram 1')
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('opens the lightbox from the preview and leaves PNG download unzoomed', async () => {
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg"></svg>'
+    vi.mocked(renderBlock).mockResolvedValue({ ok: true, svg })
+    vi.mocked(svgToRaster).mockResolvedValue(
+      new Blob(['png'], { type: 'image/png' }),
+    )
+    const user = userEvent.setup()
+    render(<PlantumlTool />)
+    await user.type(
+      screen.getByLabelText('PlantUML source'),
+      '@startuml{Enter}A -> B{Enter}@enduml',
+    )
+    await user.click(screen.getByRole('button', { name: 'Visualize' }))
+    await user.click(await screen.findByRole('button', { name: 'View diagram 1' }))
+    expect(await screen.findByRole('dialog')).toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Download PNG' }))
+    expect(svgToRaster).toHaveBeenCalledWith(svg, { format: 'png', scale: 1 })
   })
 })

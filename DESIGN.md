@@ -259,6 +259,12 @@ cleanup candidate, not a system still in use.
   coding — they state facts, they don't need to look like achievements.
 - **Alert text** (`role="alert"`): `--danger`/`text-destructive`, no icon, no
   background fill — stays inline with the field it describes.
+- **PlantUML diagram lightbox** (PlantUML tool only): native `<dialog>`,
+  `::backdrop` a warm dim over `--bg` (not a cool black void, not glass),
+  panel `--surface` / `bg-card`, hairline `--border`, **Close** is a ghost
+  `Button` with Lucide `X` (same generic-action exception as Copy/Trash).
+  Viewport uses `cursor-grab` / `cursor-grabbing`. No new overlay vocabulary
+  for other tools.
 
 ## Motion (exactly three)
 
