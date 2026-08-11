@@ -18,4 +18,4 @@ Landing surface listing GJB Toolbox tools. Brand-forward, operable (Impeccable O
 - Under trust pills: one-line origin note (why GJB Toolbox exists — PDF vs image-only invoice apps)
 - First viewport: brand **GJB Toolbox** as hero-level signal, short supporting line, tool access
 - Avoid dashboard clutter and card spam unless needed for interaction
-- Group headers are hairline section labels with an SVG chevron, not filled tabs or cards
+- Group headers are raised `--surface` bands (display face, weight 700, `--line-strong` ring; brass ring on hover/focus) so they read as drawer labels, not another tool row. Padding + matching negative margin keeps labels on the origin/hero left edge.

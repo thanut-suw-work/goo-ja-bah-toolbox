@@ -291,9 +291,11 @@ there.
 - **Home**: left-aligned hero block (wordmark at `--text-hero`, tagline,
   trust-pill row, then the origin note directly under the pills), generous
   top/bottom space, then four native `<details>` groups (Text, IDs & time,
-  Files, Diagrams). Each group is a hairline summary plus full-width rows
-  (title + description + mono route tag), each row a single `<Link>` — no
-  cards, no grid. Groups start open; collapse is session-only.
+  Files, Diagrams). Each group header is a raised `--surface` band with a
+  `--line-strong` ring (brass ring on hover/focus) and display type at
+  weight 700; tools underneath stay full-width rows (title + description +
+  mono route tag), each a single `<Link>` — no cards, no grid. Groups start
+  open; collapse is session-only.
 - **Tool page** (`ToolLayout`): small muted back-link (authored left-pointing
   SVG chevron + "GJB Toolbox", not a `←` glyph), `h1` title,
   `--text-secondary` description, hairline divider — this header chrome is
