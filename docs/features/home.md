@@ -6,13 +6,16 @@ Landing surface listing GJB Toolbox tools. Brand-forward, operable (Impeccable O
 
 ## Behavior
 
-- Read all seven tools from registry
-- Show title + description per tool as navigable links
-- Navigate to `/tools/:id` on select
-- No persisted “recent” or favorites (ephemeral product)
+- Read tools via `toolsByGroup()` from the registry catalog
+- Four `<details>` sections, all open on first paint: **Text**, **IDs & time**, **Files**, **Diagrams**
+- Each `<summary>` label is the group name; tool rows inside are the same title + description + `/tools/:id` links as before
+- Click a summary to collapse/expand that group only (session React state; refresh resets to all-open)
+- Navigate to `/tools/:id` on tool select
+- No persisted “recent”, favorites, or open/closed chrome (ephemeral product)
 
 ## UI notes
 
 - Under trust pills: one-line origin note (why GJB Toolbox exists — PDF vs image-only invoice apps)
 - First viewport: brand **GJB Toolbox** as hero-level signal, short supporting line, tool access
 - Avoid dashboard clutter and card spam unless needed for interaction
+- Group headers are hairline section labels with an SVG chevron, not filled tabs or cards

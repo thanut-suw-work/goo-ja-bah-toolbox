@@ -25,9 +25,10 @@ Central module (e.g. `src/tools/registry.ts`) exports entries:
 
 - `id` — URL segment
 - `title`, `description` — home + layout
+- `groupId` — catalog group (`text` / `ids-time` / `files` / `diagrams`)
 - `component` — `React.lazy(() => import(...))`
 
-Home and nav read the registry. Router loads lazy component by `id`.
+Also exports `toolGroups` (id + label, display order) and `toolsByGroup()`. Home renders grouped `<details>` from that helper. Router loads lazy component by `id`.
 
 Heavy tools (PDF, PlantUML, Mermaid) must be separate async chunks so first paint stays small.
 

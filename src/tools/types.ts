@@ -13,9 +13,17 @@ export type ToolId =
   | 'svg-to-image'
   | 'mermaid'
 
+export type ToolGroupId = 'text' | 'ids-time' | 'files' | 'diagrams'
+
+export type ToolGroup = {
+  id: ToolGroupId
+  label: string
+}
+
 export type ToolDefinition = {
   id: ToolId
   title: string
   description: string
+  groupId: ToolGroupId
   component: LazyExoticComponent<ComponentType>
 }

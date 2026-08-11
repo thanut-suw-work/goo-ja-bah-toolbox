@@ -375,6 +375,63 @@ button {
   transform: translateX(0);
 }
 
+.tool-groups {
+  margin: 0;
+  padding: 0;
+}
+
+.tool-group {
+  border-bottom: 1px solid var(--line);
+}
+
+.tool-group__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+}
+
+.tool-group__summary::-webkit-details-marker {
+  display: none;
+}
+
+.tool-group__summary::marker {
+  content: '';
+}
+
+.tool-group__summary:hover {
+  background-color: var(--surface);
+}
+
+.tool-group__summary:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.tool-group__chevron {
+  flex-shrink: 0;
+  color: var(--brass-strong);
+  transform: rotate(0deg);
+  transition: transform 160ms ease-out;
+}
+
+.tool-group[open] .tool-group__chevron {
+  transform: rotate(90deg);
+}
+
+.tool-group .tool-row:last-child {
+  border-bottom: none;
+}
+
 /* ---------------------------------------------------------------------- */
 /* Tool page chrome                                                       */
 /* ---------------------------------------------------------------------- */

@@ -9,4 +9,9 @@ test('home shows brand and tools', async ({ page }) => {
       /I built this after getting stuck on apps that only accept tax invoices as images/,
     ),
   ).toBeVisible()
+  for (const name of ['Text', 'IDs & time', 'Files', 'Diagrams']) {
+    await expect(
+      page.locator('summary').filter({ hasText: name }),
+    ).toBeVisible()
+  }
 })
