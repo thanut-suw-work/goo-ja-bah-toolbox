@@ -1,4 +1,4 @@
-export type UtfEncoding = 'utf-8' | 'utf-16le' | 'utf-32le'
+export type UtfEncoding = 'utf-8' | 'utf-16le' | 'utf-32le' | 'code-points'
 
 export type HexParseResult =
   | { ok: true; bytes: Uint8Array }
@@ -186,6 +186,10 @@ export function encodeUtf(
   if (encoding === 'utf-32le') {
     return formatHex(encodeUtf32Le(text, bom))
   }
+  if (encoding === 'code-points') {
+    void bom
+    return formatCodePoints(text)
+  }
   const _exhaustive: never = encoding
   throw new Error(`encode not implemented: ${_exhaustive}`)
 }
@@ -195,6 +199,16 @@ export function decodeUtf(
   encoding: UtfEncoding,
   bom: boolean,
 ): UtfDecodeResult {
+  if (encoding === 'code-points') {
+    void bom
+    const parsed = parseCodePoints(hex)
+    if (!parsed.ok) return parsed
+    let text = ''
+    for (const cp of parsed.codePoints) {
+      text += String.fromCodePoint(cp)
+    }
+    return { ok: true, text }
+  }
   const parsed = parseHex(hex)
   if (!parsed.ok) return parsed
   let bytes = parsed.bytes

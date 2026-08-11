@@ -192,3 +192,42 @@ describe('utf-32le', () => {
     expect(r.ok).toBe(false)
   })
 })
+
+describe('code-points', () => {
+  it('encodes the Thai sample', () => {
+    expect(encodeUtf('testtt อิ', 'code-points', false)).toBe(
+      '0x74 0x65 0x73 0x74 0x74 0x74 0x20 0xE2D 0xE34',
+    )
+  })
+
+  it('round-trips ASCII, Thai, and emoji', () => {
+    for (const text of ['Hi', 'testtt อิ', '😀']) {
+      const hex = encodeUtf(text, 'code-points', false)
+      const r = decodeUtf(hex, 'code-points', false)
+      expect(r.ok).toBe(true)
+      if (r.ok) expect(r.text).toBe(text)
+    }
+  })
+
+  it('decodes padded 0x0E2D', () => {
+    const r = decodeUtf('0x0E2D', 'code-points', false)
+    expect(r.ok).toBe(true)
+    if (r.ok) expect(r.text).toBe('อ')
+  })
+
+  it('ignores bom flag', () => {
+    expect(encodeUtf('A', 'code-points', true)).toBe('0x41')
+  })
+
+  it('does not use byte parseHex (odd nibble token is a scalar)', () => {
+    const r = decodeUtf('0xE2D', 'code-points', false)
+    expect(r.ok).toBe(true)
+    if (r.ok) expect(r.text).toBe('อ')
+  })
+
+  it('surfaces parse errors', () => {
+    const r = decodeUtf('0xD800', 'code-points', false)
+    expect(r.ok).toBe(false)
+    if (!r.ok) expect(r.error).toBe('Surrogate code point')
+  })
+})
