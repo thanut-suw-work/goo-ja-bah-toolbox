@@ -7,7 +7,7 @@ import {
   applyWheelZoom,
   panZoomStyle,
   type PanZoom,
-} from './panZoom'
+} from '@/tools/shared/panZoom'
 
 type DiagramLightboxProps = {
   open: boolean
@@ -105,9 +105,9 @@ export function DiagramLightbox({
   return (
     <dialog
       ref={dialogRef}
-      aria-labelledby="plantuml-lightbox-title"
+      aria-labelledby="diagram-lightbox-title"
       aria-modal="true"
-      className="plantuml-lightbox flex flex-col overflow-hidden"
+      className="diagram-lightbox flex flex-col overflow-hidden"
       onCancel={(e) => {
         e.preventDefault()
         onClose()
@@ -118,7 +118,7 @@ export function DiagramLightbox({
     >
       <header className="flex shrink-0 items-center justify-between gap-4 border-b px-4 py-3">
         <h2
-          id="plantuml-lightbox-title"
+          id="diagram-lightbox-title"
           className="text-sm font-medium uppercase tracking-wider text-muted-foreground"
         >
           {title}
@@ -136,7 +136,7 @@ export function DiagramLightbox({
         onPointerCancel={endDrag}
       >
         <div
-          className="inline-block select-none"
+          className="inline-block min-w-full select-none"
           style={panZoomStyle(transform)}
           dangerouslySetInnerHTML={{ __html: svg }}
         />

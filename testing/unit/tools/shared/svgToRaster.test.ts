@@ -159,6 +159,8 @@ describe('svgToRaster isolation', () => {
     )
     expect(helperSrc).not.toContain('@plantuml')
     expect(helperSrc).not.toContain('tools/plantuml')
+    expect(helperSrc).not.toContain('mermaid')
+    expect(helperSrc).not.toContain('tools/mermaid')
   })
 })
 

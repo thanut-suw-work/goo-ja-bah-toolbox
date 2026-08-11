@@ -64,6 +64,13 @@ export const tools: ToolDefinition[] = [
     description: 'Convert SVG to PNG or JPEG in your browser.',
     component: lazy(() => import('./svg-to-image/SvgToImageTool')),
   },
+  {
+    id: 'mermaid',
+    title: 'Mermaid',
+    description:
+      'View .mmd and Mermaid fences in the browser. Nothing is uploaded.',
+    component: lazy(() => import('./mermaid/MermaidTool')),
+  },
 ]
 
 export function getToolById(id: string): ToolDefinition | undefined {

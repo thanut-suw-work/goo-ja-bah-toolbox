@@ -117,7 +117,7 @@ Reuse `ToolLayout` (title **PlantUML**, short description: view `.puml` in the b
 ### Result cards (below, full width, file order)
 
 - Heading `Diagram 1`, `Diagram 2`, …
-- Success: clipped SVG preview (`max-height`, overflow hidden). **View** (and clicking the preview) opens a native `<dialog>` lightbox. Inside: left-drag pan, wheel zoom toward cursor (clamp 0.25–4). No pan/zoom npm package. **Esc** / backdrop / **Close**. Transform resets on close and on a new Visualize. Downloads are the original SVG, not the zoomed view.
+- Success: clipped SVG preview (`max-height`, overflow hidden). **View** (and clicking the preview) opens a native `<dialog>` lightbox. Inside: left-drag pan, wheel zoom toward cursor (clamp 0.25–8). No pan/zoom npm package. **Esc** / backdrop / **Close**. Transform resets on close and on a new Visualize. Downloads are the original SVG, not the zoomed view.
 - Actions: **View**, **Download SVG**, **Download PNG** (PNG button disabled/busy while that card rasterizes)
 - Filenames: `{stem}-{n}.svg` / `{stem}-{n}.png`. `stem` = basename without extension of the last successfully read file; paste-only or after **Clear** → `diagram`. Editing the textarea after a pick keeps that stem until Clear or a new file pick
 - Failure: no SVG; `role="alert"` on **that** card; siblings unchanged

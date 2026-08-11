@@ -5,9 +5,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { ActionBar, IoPanel } from '@/tools/shared/IoPanels'
-import { svgToRaster } from '@/tools/shared/svgToRaster'
 import { DiagramLightbox } from '@/tools/shared/DiagramLightbox'
-import { formatIncludeError, parsePlantUml } from './parse'
+import { svgToRaster } from '@/tools/shared/svgToRaster'
+import { parseMermaid } from './parse'
 import { renderBlock } from './render'
 
 export type DiagramResult =
@@ -33,7 +33,7 @@ function triggerBlobDownload(blob: Blob, filename: string): string {
   return url
 }
 
-export function PlantumlTool() {
+export function MermaidTool() {
   const [source, setSource] = useState('')
   const [filename, setFilename] = useState<string | null>(null)
   const [stem, setStem] = useState('diagram')
@@ -111,19 +111,15 @@ export function PlantumlTool() {
     setViewing(null)
     setBusy(true)
     try {
-      const blocks = parsePlantUml(source)
+      const blocks = parseMermaid(source)
       const acc: DiagramResult[] = []
       for (const block of blocks) {
-        if (block.includeHit) {
-          acc.push({ ok: false, error: formatIncludeError(block.includeHit) })
-        } else {
-          const r = await renderBlock(block.lines, block.startLine)
-          acc.push(
-            r.ok
-              ? { ok: true, svg: r.svg, pngError: null }
-              : { ok: false, error: r.error },
-          )
-        }
+        const r = await renderBlock(block.text, block.startLine)
+        acc.push(
+          r.ok
+            ? { ok: true, svg: r.svg, pngError: null }
+            : { ok: false, error: r.error },
+        )
         if (aliveRef.current) setResults([...acc])
       }
     } catch (e) {
@@ -189,14 +185,14 @@ export function PlantumlTool() {
         }
       >
         <div className="space-y-3 border-b p-4">
-          <Label htmlFor="plantuml-file" className="text-muted-foreground">
+          <Label htmlFor="mermaid-file" className="text-muted-foreground">
             Open file
           </Label>
           <Input
-            id="plantuml-file"
+            id="mermaid-file"
             ref={fileInputRef}
             type="file"
-            accept=".puml,.plantuml,.iuml,.wsd,.txt"
+            accept=".mmd,.mermaid,.md,.markdown,.txt"
             className="max-w-xs cursor-pointer"
             onChange={onFileChange}
           />
@@ -208,9 +204,36 @@ export function PlantumlTool() {
               {readError}
             </p>
           ) : null}
+          <p className="text-sm text-muted-foreground">
+            Each fence is one diagram; no fence → whole file.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-muted-foreground">
+                Raw .mmd
+              </p>
+              <pre
+                aria-label="Example raw .mmd"
+                className="overflow-x-auto rounded-md bg-background p-3 font-mono text-xs text-foreground"
+              >{`flowchart TD
+  A-->B`}</pre>
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-muted-foreground">
+                Markdown fences
+              </p>
+              <pre
+                aria-label="Example Markdown fences"
+                className="overflow-x-auto rounded-md bg-background p-3 font-mono text-xs text-foreground"
+              >{`\`\`\`mermaid
+flowchart TD
+  A-->B
+\`\`\``}</pre>
+            </div>
+          </div>
         </div>
         <Textarea
-          aria-label="PlantUML source"
+          aria-label="Mermaid source"
           className="min-h-[300px] resize-none rounded-none border-0 font-mono focus-visible:ring-0 focus-visible:ring-offset-0"
           value={source}
           onChange={(e) => setSource(e.target.value)}
@@ -293,4 +316,4 @@ export function PlantumlTool() {
   )
 }
 
-export default PlantumlTool
+export default MermaidTool

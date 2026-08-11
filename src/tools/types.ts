@@ -11,6 +11,7 @@ export type ToolId =
   | 'utf-encoding'
   | 'plantuml'
   | 'svg-to-image'
+  | 'mermaid'
 
 export type ToolDefinition = {
   id: ToolId

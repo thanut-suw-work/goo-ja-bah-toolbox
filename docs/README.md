@@ -29,6 +29,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/specs/2026-08-11-utf-code-points-design.md` | UTF tool: Unicode code points (`0x…`) mode |
 | `superpowers/specs/2026-08-11-plantuml-viewer-design.md` | PlantUML viewer (in-browser `@plantuml/core`) |
 | `superpowers/specs/2026-08-11-svg-to-image-design.md` | SVG → PNG/JPEG (shared `svgToRaster`) |
+| `superpowers/specs/2026-08-12-mermaid-viewer-design.md` | Mermaid viewer (in-browser `mermaid`) |
 
 ## Implementation plans
 
@@ -41,6 +42,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/plans/2026-08-11-utf-code-points.md` | UTF tool: code points mode |
 | `superpowers/plans/2026-08-11-svg-to-image.md` | SVG → PNG/JPEG + shared `svgToRaster` |
 | `superpowers/plans/2026-08-11-plantuml-viewer.md` | PlantUML viewer (`@plantuml/core`, stacked SVG) |
+| `superpowers/plans/2026-08-12-mermaid-viewer.md` | Mermaid viewer (`mermaid`, stacked SVG) |
 
 ## Feature docs
 
@@ -58,6 +60,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `features/utf-encoding.md` | UTF encoding bi-converter (bytes + code points) |
 | `features/svg-to-image.md` | SVG → PNG/JPEG |
 | `features/plantuml.md` | PlantUML viewer (in-browser `@plantuml/core`) |
+| `features/mermaid.md` | Mermaid viewer (in-browser `mermaid`) |
 
 ## UI reference (repo root)
 

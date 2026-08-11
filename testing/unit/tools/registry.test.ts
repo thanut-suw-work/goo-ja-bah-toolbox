@@ -23,6 +23,7 @@ describe('registry', () => {
       'utf-encoding',
       'plantuml',
       'svg-to-image',
+      'mermaid',
     ]
     expect(tools.map((t) => t.id).sort()).toEqual([...expected].sort())
   })

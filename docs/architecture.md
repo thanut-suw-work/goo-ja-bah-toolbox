@@ -29,7 +29,7 @@ Central module (e.g. `src/tools/registry.ts`) exports entries:
 
 Home and nav read the registry. Router loads lazy component by `id`.
 
-Heavy tools (PDF, PlantUML) must be separate async chunks so first paint stays small.
+Heavy tools (PDF, PlantUML, Mermaid) must be separate async chunks so first paint stays small.
 
 ## Source layout (target)
 

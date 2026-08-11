@@ -7,9 +7,13 @@ import {
   applyWheelZoom,
   clampScale,
   panZoomStyle,
-} from '@/tools/plantuml/panZoom'
+} from '@/tools/shared/panZoom'
 
 describe('clampScale', () => {
+  it('allows at least 8x zoom for wide diagrams like gantt', () => {
+    expect(MAX_SCALE).toBeGreaterThanOrEqual(8)
+  })
+
   it('clamps below the minimum', () => {
     expect(clampScale(0.01)).toBe(MIN_SCALE)
   })

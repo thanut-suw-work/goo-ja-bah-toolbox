@@ -5,7 +5,7 @@ export type PanZoom = {
 }
 
 export const MIN_SCALE = 0.25
-export const MAX_SCALE = 4
+export const MAX_SCALE = 8
 export const IDENTITY: PanZoom = { x: 0, y: 0, scale: 1 }
 
 const ZOOM_SENSITIVITY = 0.002
