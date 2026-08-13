@@ -64,6 +64,9 @@ function colorizeInner(
     for (const el of geoms) {
       el.setAttribute('fill', triple.fill)
       el.setAttribute('stroke', triple.stroke)
+      const s = el as HTMLElement | SVGElement
+      s.style.setProperty('fill', triple.fill, 'important')
+      s.style.setProperty('stroke', triple.stroke, 'important')
       stamped = true
     }
   }
@@ -71,7 +74,9 @@ function colorizeInner(
   const paintLabels = (scope: ParentNode, triple: ColorTriple) => {
     for (const el of scope.querySelectorAll('text, tspan, .nodeLabel')) {
       el.setAttribute('fill', triple.label)
-      ;(el as HTMLElement).style.color = triple.label
+      const s = el as HTMLElement | SVGElement
+      s.style.setProperty('fill', triple.label, 'important')
+      s.style.setProperty('color', triple.label, 'important')
     }
   }
 
@@ -104,7 +109,9 @@ function colorizeInner(
       const triple = cache.get(name)
       if (!triple) continue
       t.setAttribute('fill', triple.label)
-      ;(t as HTMLElement).style.color = triple.label
+      const s = t as HTMLElement | SVGElement
+      s.style.setProperty('fill', triple.label, 'important')
+      s.style.setProperty('color', triple.label, 'important')
     }
   } else if (type === 'class') {
     for (const group of root.querySelectorAll('g.classGroup')) {
@@ -143,7 +150,9 @@ function colorizeInner(
       paintGeoms([task], triple)
       if (label) {
         label.setAttribute('fill', triple.label)
-        ;(label as HTMLElement).style.color = triple.label
+        const s = label as HTMLElement | SVGElement
+        s.style.setProperty('fill', triple.label, 'important')
+        s.style.setProperty('color', triple.label, 'important')
       }
     }
   }

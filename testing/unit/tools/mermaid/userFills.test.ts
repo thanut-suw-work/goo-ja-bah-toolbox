@@ -45,6 +45,19 @@ describe('parseUserFills', () => {
     expect(u.ids.has('A')).toBe(true)
   })
 
+  it('records chained ::: id as the token before first :::', () => {
+    const u = parseUserFills('classDef foo fill:#f96\nA:::foo:::bar')
+    expect(u.ids.has('A')).toBe(true)
+    expect(u.ids.has('A:::foo')).toBe(false)
+  })
+
+  it('skips flowchart class and er when classDef default has fill', () => {
+    const u = parseUserFills('classDef default fill:#f96')
+    expect(u.skipFamilies.has('flowchart')).toBe(true)
+    expect(u.skipFamilies.has('class')).toBe(true)
+    expect(u.skipFamilies.has('er')).toBe(true)
+  })
+
   it('skips sequence when actorBkg is set', () => {
     const u = parseUserFills("%%{init: {'themeVariables': {'actorBkg': '#ff0'}}}%%")
     expect(u.skipFamilies.has('sequence')).toBe(true)

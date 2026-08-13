@@ -11,6 +11,14 @@ function fills(svg: string, selector: string): string[] {
   )
 }
 
+function cssFillHex(css: string): string {
+  const m = css.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i)
+  if (!m) return css.toLowerCase()
+  return `#${[m[1], m[2], m[3]]
+    .map((n) => Number(n).toString(16).padStart(2, '0'))
+    .join('')}`
+}
+
 const FLOW = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescription="flowchart-v2">
   <g class="node" data-id="A"><rect class="label-container" fill="#1f2020" stroke="#ccc"/><text fill="#ccc">Start</text></g>
   <g class="node" data-id="B"><polygon class="label-container" fill="#1f2020" stroke="#ccc"/></g>
@@ -132,5 +140,21 @@ describe('colorizePreview', () => {
     const r = colorizePreview(svg, 'flowchart TD', 'dark', rng0)
     expect(r.colored).toBe(false)
     expect(r.previewSvg).toBe(svg)
+  })
+
+  it('stamps inline fill style so engine CSS cannot win', () => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescription="flowchart-v2">
+  <style>.node rect { fill: #1f2020; }</style>
+  <g class="node" data-id="A"><rect class="label-container" fill="#1f2020"/></g>
+</svg>`
+    const { previewSvg } = colorizePreview(svg, 'flowchart TD\nA', 'dark', rng0)
+    const rect = new DOMParser()
+      .parseFromString(previewSvg, 'image/svg+xml')
+      .querySelector('g.node .label-container') as SVGElement | null
+    const fill = cssFillHex(rect?.style.getPropertyValue('fill') ?? '')
+    expect(fill).not.toBe('')
+    expect(fill).not.toBe('#1f2020')
+    expect(PALETTES.dark.some((t) => t.fill === fill)).toBe(true)
+    expect(rect?.style.getPropertyPriority('fill')).toBe('important')
   })
 })

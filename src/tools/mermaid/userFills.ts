@@ -30,6 +30,12 @@ export function parseUserFills(source: string): UserFills {
     classHasFill.set(m[1]!, Boolean(classHasFill.get(m[1]!)) || FILL_RE.test(m[2]!))
   }
 
+  if (classHasFill.get('default')) {
+    skipFamilies.add('flowchart')
+    skipFamilies.add('class')
+    skipFamilies.add('er')
+  }
+
   for (const m of source.matchAll(/^\s*class\s+(\S+)\s+(\S+)/gim)) {
     if (!classHasFill.get(m[2]!)) continue
     for (const id of m[1]!.split(',')) {
@@ -38,8 +44,9 @@ export function parseUserFills(source: string): UserFills {
     }
   }
 
-  for (const m of source.matchAll(/(?:^|[\s])(\S+):::(\S+)/g)) {
-    if (classHasFill.get(m[2]!)) ids.add(m[1]!)
+  for (const m of source.matchAll(/(?:^|[\s])([^\s:]+):::(\S+)/g)) {
+    const classes = m[2]!.split(':::')
+    if (classes.some((c) => classHasFill.get(c))) ids.add(m[1]!)
   }
 
   for (const m of source.matchAll(
