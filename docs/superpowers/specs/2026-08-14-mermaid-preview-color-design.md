@@ -79,8 +79,8 @@ Detect type from root SVG `aria-roledescription` (`flowchart` / `flowchart-v2` �
 |------|---------|------|----------------------------------|
 | Flowchart | `g.node` geom (`.label-container`, `rect`, `polygon`, `circle`) | `.cluster`, `.edgeLabel`, edges | `data-id` or id after `flowchart-` prefix |
 | Sequence | `rect.actor`; stick-figure `g.actor-man` fills | `.actor-line`, messages, notes, activation `rect` (not `.actor`) | `name` attr or inner text |
-| Class | `g.classGroup` outer geom | relations | `data-id` or title text |
-| ER | `g.node` geom (same as flowchart; mermaid 11 ER is node-based) | relationships, edge labels | `data-id` or id |
+| Class | mermaid 11: inject `rect.gjb-header-fill` from outer-path top to first `.divider` (title band only). No divider → whole box. Legacy `g.classGroup` rect. Title `.label-group` only | relations, `.members-group` / `.methods-group` | `data-id` or `classId-NAME-n` |
+| ER | mermaid 11: `.outer-path` header band only. Empty entity: `:scope > rect.label-container`. Title `.label.name` only | relationships, `.row-rect-odd` / `.row-rect-even`, attribute labels | `data-id` or `entity-NAME-n` |
 | Gantt | `rect.task` (not `.section`) | section row tints, axis, title | task name text |
 | Other | — | whole diagram | — |
 

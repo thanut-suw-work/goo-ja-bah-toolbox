@@ -31,7 +31,7 @@ View Mermaid source in the browser. Paste or open one file, click **Visualize**,
 ### Preview color
 
 - Post-process clone after one `mermaid.render`; `colorizePreview` in `colorizeSvg.ts`.
-- Primary shapes: flowchart nodes, sequence participants/actors, class boxes, ER entities, gantt task bars. Other types unchanged.
+- Primary shapes: flowchart nodes, sequence participants/actors, class **title band** (not member/method rows), ER **entity header** (not attribute rows), gantt task bars. Other types unchanged.
 - User fills from **block source** (`style` / `classDef` / `:::`, init/YAML `actorBkg` `primaryColor` `taskBkgColor`, gantt `crit|done|active`) are not overpainted.
 - Colorize throw → raw SVG, no checkbox.
 - Tests: `userFills.test.ts`, `palette.test.ts`, `colorizeSvg.test.ts`; UI mocks `colorizePreview` as well as `renderBlock` / `svgToRaster`.

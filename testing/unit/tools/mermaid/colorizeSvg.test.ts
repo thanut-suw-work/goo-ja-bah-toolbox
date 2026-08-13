@@ -75,9 +75,14 @@ const CLASS_V11 = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescription=
   </g>
   <g class="node default" id="mmd-1-classId-Dog-10">
     <g class="basic label-container outer-path">
-      <path fill="#1f2020" stroke="none"/>
+      <path fill="#1f2020" stroke="none" d="M-45 -63 L45 -63 L45 63 L-45 63 Z"/>
       <path fill="none" stroke="#ccc"/>
     </g>
+    <g class="divider">
+      <path fill="none" d="M-45 -15 L45 -15"/>
+    </g>
+    <g class="label-group text"><text fill="#ccc">Dog</text></g>
+    <g class="methods-group text"><text fill="#ccc">+bark()</text></g>
   </g>
 </svg>`
 
@@ -94,6 +99,11 @@ const ER_V11 = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescription="er
       <path fill="#1f2020" stroke="none"/>
       <path fill="none" stroke="#ccc"/>
     </g>
+    <g class="row-rect-odd">
+      <path fill="#222222" stroke="none"/>
+    </g>
+    <g class="label name"><text fill="#ccc">ORDER</text></g>
+    <g class="label attribute-name"><text fill="#ccc">orderNumber</text></g>
   </g>
   <g class="node default" id="mmd-1-entity-LINE-ITEM-2">
     <rect class="basic label-container" fill="#1f2020"/>
@@ -177,7 +187,7 @@ describe('colorizePreview', () => {
     expect(r.previewSvg).toBe(svg)
   })
 
-  it('recolors mermaid 11 class nodes that use filled paths (Dog)', () => {
+  it('recolors mermaid 11 class header band only (Dog)', () => {
     const { previewSvg, colored } = colorizePreview(
       CLASS_V11,
       'classDiagram\nclass Animal\nclass Dog',
@@ -186,20 +196,29 @@ describe('colorizePreview', () => {
     )
     expect(colored).toBe(true)
     const doc = new DOMParser().parseFromString(previewSvg, 'image/svg+xml')
-    const filled = [
-      ...doc.querySelectorAll('#mmd-1-classId-Dog-10 path'),
-    ].find((p) => p.getAttribute('fill') && p.getAttribute('fill') !== 'none')
-    expect(filled?.getAttribute('fill')).not.toBe('#1f2020')
-    expect(
-      PALETTES.dark.some((t) => t.fill === filled?.getAttribute('fill')),
-    ).toBe(true)
-    const outline = [...doc.querySelectorAll('#mmd-1-classId-Dog-10 path')].find(
-      (p) => p.getAttribute('fill') === 'none',
+    const dog = doc.querySelector('#mmd-1-classId-Dog-10')
+    const bodyFill = [...(dog?.querySelectorAll('.outer-path path') ?? [])].find(
+      (p) => p.getAttribute('fill') && p.getAttribute('fill') !== 'none',
     )
-    expect(outline?.getAttribute('fill')).toBe('none')
+    expect(bodyFill?.getAttribute('fill')).toBe('#1f2020')
+    const header = dog?.querySelector('rect.gjb-header-fill')
+    expect(header).not.toBeNull()
+    expect(header?.getAttribute('fill')).not.toBe('#1f2020')
+    expect(
+      PALETTES.dark.some((t) => t.fill === header?.getAttribute('fill')),
+    ).toBe(true)
+    expect(header?.getAttribute('y')).toBe('-63')
+    expect(header?.getAttribute('height')).toBe('48')
+    expect(dog?.querySelector('.methods-group text')?.getAttribute('fill')).toBe(
+      '#ccc',
+    )
+    const animalFill = [
+      ...doc.querySelectorAll('#mmd-1-classId-Animal-9 .outer-path path'),
+    ].find((p) => p.getAttribute('fill') && p.getAttribute('fill') !== 'none')
+    expect(animalFill?.getAttribute('fill')).not.toBe('#1f2020')
   })
 
-  it('recolors mermaid 11 ER attribute entities that use filled paths (ORDER)', () => {
+  it('recolors mermaid 11 ER header only, not attribute rows (ORDER)', () => {
     const { previewSvg, colored } = colorizePreview(
       ER_V11,
       'erDiagram\nCUSTOMER ||--o{ ORDER : places',
@@ -209,12 +228,27 @@ describe('colorizePreview', () => {
     expect(colored).toBe(true)
     const doc = new DOMParser().parseFromString(previewSvg, 'image/svg+xml')
     const filled = [
-      ...doc.querySelectorAll('#mmd-1-entity-ORDER-1 path'),
+      ...doc.querySelectorAll('#mmd-1-entity-ORDER-1 .outer-path path'),
     ].find((p) => p.getAttribute('fill') && p.getAttribute('fill') !== 'none')
     expect(filled?.getAttribute('fill')).not.toBe('#1f2020')
     expect(
       PALETTES.dark.some((t) => t.fill === filled?.getAttribute('fill')),
     ).toBe(true)
+    expect(
+      doc
+        .querySelector('#mmd-1-entity-ORDER-1 .row-rect-odd path')
+        ?.getAttribute('fill'),
+    ).toBe('#222222')
+    expect(
+      doc
+        .querySelector('#mmd-1-entity-ORDER-1 .label.attribute-name text')
+        ?.getAttribute('fill'),
+    ).toBe('#ccc')
+    expect(
+      doc
+        .querySelector('#mmd-1-entity-LINE-ITEM-2 rect.label-container')
+        ?.getAttribute('fill'),
+    ).not.toBe('#1f2020')
   })
 
   it('stamps inline fill style so engine CSS cannot win', () => {
