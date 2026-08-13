@@ -65,6 +65,41 @@ const FLOW_ENGINE_ID = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescrip
   <g class="node" id="flowchart-B-13"><polygon class="label-container" fill="#1f2020" stroke="#ccc"/></g>
 </svg>`
 
+/** mermaid 11 class: g.node + filled path, no classGroup */
+const CLASS_V11 = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescription="class">
+  <g class="node default" id="mmd-1-classId-Animal-9">
+    <g class="basic label-container outer-path">
+      <path fill="#1f2020" stroke="none"/>
+      <path fill="none" stroke="#ccc"/>
+    </g>
+  </g>
+  <g class="node default" id="mmd-1-classId-Dog-10">
+    <g class="basic label-container outer-path">
+      <path fill="#1f2020" stroke="none"/>
+      <path fill="none" stroke="#ccc"/>
+    </g>
+  </g>
+</svg>`
+
+/** mermaid 11 ER: attribute entities use path; empty entity uses rect */
+const ER_V11 = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescription="er">
+  <g class="node default" id="mmd-1-entity-CUSTOMER-0">
+    <g class="outer-path">
+      <path fill="#1f2020" stroke="none"/>
+      <path fill="none" stroke="#ccc"/>
+    </g>
+  </g>
+  <g class="node default" id="mmd-1-entity-ORDER-1">
+    <g class="outer-path">
+      <path fill="#1f2020" stroke="none"/>
+      <path fill="none" stroke="#ccc"/>
+    </g>
+  </g>
+  <g class="node default" id="mmd-1-entity-LINE-ITEM-2">
+    <rect class="basic label-container" fill="#1f2020"/>
+  </g>
+</svg>`
+
 describe('colorizePreview', () => {
   it('recolors unstyled flowchart nodes and skips clusters', () => {
     const { previewSvg, colored } = colorizePreview(FLOW, 'flowchart TD\nA-->B', 'dark', rng0)
@@ -140,6 +175,46 @@ describe('colorizePreview', () => {
     const r = colorizePreview(svg, 'flowchart TD', 'dark', rng0)
     expect(r.colored).toBe(false)
     expect(r.previewSvg).toBe(svg)
+  })
+
+  it('recolors mermaid 11 class nodes that use filled paths (Dog)', () => {
+    const { previewSvg, colored } = colorizePreview(
+      CLASS_V11,
+      'classDiagram\nclass Animal\nclass Dog',
+      'dark',
+      rng0,
+    )
+    expect(colored).toBe(true)
+    const doc = new DOMParser().parseFromString(previewSvg, 'image/svg+xml')
+    const filled = [
+      ...doc.querySelectorAll('#mmd-1-classId-Dog-10 path'),
+    ].find((p) => p.getAttribute('fill') && p.getAttribute('fill') !== 'none')
+    expect(filled?.getAttribute('fill')).not.toBe('#1f2020')
+    expect(
+      PALETTES.dark.some((t) => t.fill === filled?.getAttribute('fill')),
+    ).toBe(true)
+    const outline = [...doc.querySelectorAll('#mmd-1-classId-Dog-10 path')].find(
+      (p) => p.getAttribute('fill') === 'none',
+    )
+    expect(outline?.getAttribute('fill')).toBe('none')
+  })
+
+  it('recolors mermaid 11 ER attribute entities that use filled paths (ORDER)', () => {
+    const { previewSvg, colored } = colorizePreview(
+      ER_V11,
+      'erDiagram\nCUSTOMER ||--o{ ORDER : places',
+      'dark',
+      rng0,
+    )
+    expect(colored).toBe(true)
+    const doc = new DOMParser().parseFromString(previewSvg, 'image/svg+xml')
+    const filled = [
+      ...doc.querySelectorAll('#mmd-1-entity-ORDER-1 path'),
+    ].find((p) => p.getAttribute('fill') && p.getAttribute('fill') !== 'none')
+    expect(filled?.getAttribute('fill')).not.toBe('#1f2020')
+    expect(
+      PALETTES.dark.some((t) => t.fill === filled?.getAttribute('fill')),
+    ).toBe(true)
   })
 
   it('stamps inline fill style so engine CSS cannot win', () => {

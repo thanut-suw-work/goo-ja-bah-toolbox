@@ -13,7 +13,7 @@ export type ColorizeResult = {
   colored: boolean
 }
 
-const GEOM = '.label-container, rect, polygon, circle'
+const GEOM = '.label-container, rect, polygon, circle, path'
 
 export function colorizePreview(
   svg: string,
@@ -62,6 +62,10 @@ function colorizeInner(
 
   const paintGeoms = (geoms: Iterable<Element>, triple: ColorTriple) => {
     for (const el of geoms) {
+      if (el.localName === 'path') {
+        const fill = el.getAttribute('fill')
+        if (!fill || fill === 'none') continue
+      }
       el.setAttribute('fill', triple.fill)
       el.setAttribute('stroke', triple.stroke)
       const s = el as HTMLElement | SVGElement
@@ -80,8 +84,8 @@ function colorizeInner(
     }
   }
 
-  if (type === 'flowchart' || type === 'er') {
-    for (const node of root.querySelectorAll('g.node')) {
+  if (type === 'flowchart' || type === 'er' || type === 'class') {
+    for (const node of root.querySelectorAll('g.node, g.classGroup')) {
       if (node.closest('.cluster') || node.classList.contains('cluster')) continue
       if (node.closest('.edgeLabel') || node.classList.contains('edgeLabel')) continue
       const id = flowchartKey(node)
@@ -112,17 +116,6 @@ function colorizeInner(
       const s = t as HTMLElement | SVGElement
       s.style.setProperty('fill', triple.label, 'important')
       s.style.setProperty('color', triple.label, 'important')
-    }
-  } else if (type === 'class') {
-    for (const group of root.querySelectorAll('g.classGroup')) {
-      const id =
-        group.getAttribute('data-id') ??
-        group.querySelector('text')?.textContent?.trim() ??
-        ''
-      if (user.ids.has(id)) continue
-      const triple = colorFor(id)
-      paintGeoms(group.querySelectorAll('rect'), triple)
-      paintLabels(group, triple)
     }
   } else if (type === 'gantt') {
     const consumed = new Set<Element>()
@@ -179,6 +172,10 @@ function flowchartKey(node: Element): string {
   const dataId = node.getAttribute('data-id')
   if (dataId) return dataId
   const id = node.getAttribute('id') ?? ''
+  const classId = id.match(/classId-(.+)-(\d+)$/)
+  if (classId) return classId[1]!
+  const entity = id.match(/entity-(.+)-(\d+)$/)
+  if (entity) return entity[1]!
   const numbered = id.match(/^flowchart-(.+)-(\d+)$/)
   if (numbered) return numbered[1]!
   if (id.startsWith('flowchart-')) return id.slice('flowchart-'.length)
