@@ -11,9 +11,16 @@ import { useTheme } from '@/app/ThemeProvider'
 import { mermaidTheme } from '@/app/theme'
 import { parseMermaid } from './parse'
 import { renderBlock } from './render'
+import { colorizePreview } from './colorizeSvg'
 
 export type DiagramResult =
-  | { ok: true; svg: string; pngError: string | null }
+  | {
+      ok: true
+      svg: string
+      previewSvg: string
+      colored: boolean
+      pngError: string | null
+    }
   | { ok: false; error: string }
 
 function stemOf(fileName: string): string {
@@ -45,6 +52,9 @@ export function MermaidTool() {
   const [pngBusy, setPngBusy] = useState<Set<number>>(() => new Set())
   const [fatal, setFatal] = useState<Error | null>(null)
   const [viewing, setViewing] = useState<number | null>(null)
+  const [colorDownload, setColorDownload] = useState<Record<number, boolean>>(
+    {},
+  )
 
   const { resolved } = useTheme()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -113,6 +123,7 @@ export function MermaidTool() {
     setResults([])
     setPngBusy(new Set())
     setViewing(null)
+    setColorDownload({})
     revokeAll()
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
@@ -127,6 +138,7 @@ export function MermaidTool() {
       setResults([])
       setPngBusy(new Set())
       setViewing(null)
+      setColorDownload({})
     }
     setBusy(true)
     try {
@@ -138,11 +150,22 @@ export function MermaidTool() {
           block.startLine,
           mermaidTheme(resolvedRef.current),
         )
-        acc.push(
-          r.ok
-            ? { ok: true, svg: r.svg, pngError: null }
-            : { ok: false, error: r.error },
-        )
+        if (r.ok) {
+          const { previewSvg, colored } = colorizePreview(
+            r.svg,
+            block.text,
+            mermaidTheme(resolvedRef.current),
+          )
+          acc.push({
+            ok: true,
+            svg: r.svg,
+            previewSvg,
+            colored,
+            pngError: null,
+          })
+        } else {
+          acc.push({ ok: false, error: r.error })
+        }
         if (aliveRef.current) setResults([...acc])
       }
     } catch (e) {
@@ -159,12 +182,22 @@ export function MermaidTool() {
     void visualize('click')
   }
 
-  function onDownloadSvg(index: number, svg: string) {
+  function chosenSvg(index: number): string | undefined {
+    const result = results[index]
+    if (!result?.ok) return undefined
+    return colorDownload[index] ? result.previewSvg : result.svg
+  }
+
+  function onDownloadSvg(index: number) {
+    const svg = chosenSvg(index)
+    if (svg === undefined) return
     const blob = new Blob([svg], { type: 'image/svg+xml' })
     registerUrl(triggerBlobDownload(blob, `${stem}-${index + 1}.svg`))
   }
 
-  async function onDownloadPng(index: number, svg: string) {
+  async function onDownloadPng(index: number) {
+    const svg = chosenSvg(index)
+    if (svg === undefined) return
     setPngBusy((prev) => {
       const next = new Set(prev)
       next.add(index)
@@ -288,11 +321,26 @@ flowchart TD
                 >
                   <Maximize2 /> View
                 </Button>
+                {result.colored ? (
+                  <label className="flex items-center gap-2 text-sm whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(colorDownload[index])}
+                      onChange={(e) =>
+                        setColorDownload((prev) => ({
+                          ...prev,
+                          [index]: e.target.checked,
+                        }))
+                      }
+                    />
+                    Download with color?
+                  </label>
+                ) : null}
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => onDownloadSvg(index, result.svg)}
+                  onClick={() => onDownloadSvg(index)}
                 >
                   <Download /> Download SVG
                 </Button>
@@ -301,7 +349,7 @@ flowchart TD
                   variant="outline"
                   size="sm"
                   disabled={pngBusy.has(index)}
-                  onClick={() => onDownloadPng(index, result.svg)}
+                  onClick={() => onDownloadPng(index)}
                 >
                   <Download /> Download PNG
                 </Button>
@@ -317,7 +365,7 @@ flowchart TD
                 className="block max-h-[min(70vh,36rem)] w-full cursor-zoom-in overflow-hidden p-4 text-left"
                 onClick={() => setViewing(index)}
               >
-                <div dangerouslySetInnerHTML={{ __html: result.svg }} />
+                <div dangerouslySetInnerHTML={{ __html: result.previewSvg }} />
               </button>
               {result.pngError ? (
                 <p role="alert" className="px-4 pb-4 text-sm text-destructive">
@@ -336,7 +384,7 @@ flowchart TD
       <DiagramLightbox
         open={Boolean(viewed?.ok)}
         title={viewing !== null ? `Diagram ${viewing + 1}` : ''}
-        svg={viewed?.ok ? viewed.svg : ''}
+        svg={viewed?.ok ? viewed.previewSvg : ''}
         onClose={() => setViewing(null)}
       />
     </div>
