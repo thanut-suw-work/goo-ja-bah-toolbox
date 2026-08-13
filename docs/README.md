@@ -31,6 +31,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/specs/2026-08-11-plantuml-viewer-design.md` | PlantUML viewer (in-browser `@plantuml/core`) |
 | `superpowers/specs/2026-08-11-svg-to-image-design.md` | SVG → PNG/JPEG (shared `svgToRaster`) |
 | `superpowers/specs/2026-08-12-mermaid-viewer-design.md` | Mermaid viewer (in-browser `mermaid`) |
+| `superpowers/specs/2026-08-14-mermaid-preview-color-design.md` | Mermaid preview color overlay + download checkbox |
 | `superpowers/specs/2026-08-12-tool-groups-design.md` | Home tool groups (accordion by catalog) |
 | `superpowers/specs/2026-08-12-theme-design.md` | Default dark + `gjb-theme` localStorage + header cycle |
 
@@ -46,6 +47,7 @@ Read **`AGENTS.md`** at repo root first, then use this table to open only what y
 | `superpowers/plans/2026-08-11-svg-to-image.md` | SVG → PNG/JPEG + shared `svgToRaster` |
 | `superpowers/plans/2026-08-11-plantuml-viewer.md` | PlantUML viewer (`@plantuml/core`, stacked SVG) |
 | `superpowers/plans/2026-08-12-mermaid-viewer.md` | Mermaid viewer (`mermaid`, stacked SVG) |
+| `superpowers/plans/2026-08-14-mermaid-preview-color.md` | Mermaid preview color overlay |
 | `superpowers/plans/2026-08-12-tool-groups.md` | Home tool groups (accordion) |
 | `superpowers/plans/2026-08-12-theme.md` | Default dark + `gjb-theme` + header cycle |
 

@@ -13,7 +13,7 @@ View Mermaid source in the browser. Paste or open one file, click **Visualize**,
 - Unreadable file → source-card `Could not read file`.
 - **Visualize** (not live): disabled when source is empty/whitespace or a run is in flight. Label **Visualizing…** while busy (includes first engine load). Clears previous results first.
 - Layout: stacked full-width `IoPanel` Source + `ActionBar` + one result card per block. **Not** `IoGrid`. No JPEG/quality/scale/dark controls.
-- Success card: heading `Diagram N`, clipped preview (`max-h-[min(70vh,36rem)] overflow-hidden`), **View** + **Download SVG** + **Download PNG**. Preview click or **View** opens a native `<dialog>` lightbox (`aria-modal`). **Esc**, backdrop click, or **Close** dismisses. Inside the lightbox only: left-drag pans, wheel zooms toward the cursor (scale 0.25–8, no npm pan/zoom lib). Gantt renders with `useMaxWidth: false` so wide charts keep pixel size. Pan/zoom resets on close and on a new Visualize. Downloads stay the original SVG/PNG, not the zoomed view.
+- Success card: heading `Diagram N`, clipped preview (`max-h-[min(70vh,36rem)] overflow-hidden`). Preview and lightbox show the colorized clone when overlay painted at least one primary shape; otherwise engine SVG. Card actions order: **View** · **Download with color?** (native checkbox, default off, only if overlay ran) · **Download SVG** · **Download PNG**. Checkbox off → raw engine files. On → same clone as preview. Theme flip re-rolls overlay and keeps checkbox. Visualize click resets checkbox. Preview click or **View** opens a native `<dialog>` lightbox (`aria-modal`). **Esc**, backdrop click, or **Close** dismisses. Inside the lightbox only: left-drag pans, wheel zooms toward the cursor (scale 0.25–8, no npm pan/zoom lib). Gantt renders with `useMaxWidth: false` so wide charts keep pixel size. Pan/zoom resets on close and on a new Visualize. Downloads still ignore lightbox pan/zoom.
 - Filenames: `{stem}-{n}.svg` / `{stem}-{n}.png`. `stem` = basename without extension of the last successfully read file; paste-only or after Clear → `diagram`. Editing after a pick keeps the stem until Clear or a new pick.
 - Failure: that card only, `role="alert"`; siblings unchanged.
 - Double Visualize clicks are ignored via a busy ref.
@@ -27,6 +27,14 @@ View Mermaid source in the browser. Paste or open one file, click **Visualize**,
 - Lazy chunk: only `/tools/mermaid` downloads the engine. No CDN at runtime.
 - Shared PNG: `svgToRaster(svg, { format: 'png', scale: 1 })` from `src/tools/shared/svgToRaster.ts`. This tool must not reimplement rasterization.
 - Shared lightbox/panZoom: `src/tools/shared/DiagramLightbox.tsx` and `panZoom.ts` (also used by PlantUML).
+
+### Preview color
+
+- Post-process clone after one `mermaid.render`; `colorizePreview` in `colorizeSvg.ts`.
+- Primary shapes: flowchart nodes, sequence participants/actors, class boxes, ER entities, gantt task bars. Other types unchanged.
+- User fills from **block source** (`style` / `classDef` / `:::`, init/YAML `actorBkg` `primaryColor` `taskBkgColor`, gantt `crit|done|active`) are not overpainted.
+- Colorize throw → raw SVG, no checkbox.
+- Tests: `userFills.test.ts`, `palette.test.ts`, `colorizeSvg.test.ts`; UI mocks `colorizePreview` as well as `renderBlock` / `svgToRaster`.
 
 ## Privacy
 
