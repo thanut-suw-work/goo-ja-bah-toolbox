@@ -25,6 +25,29 @@ describe('PALETTES', () => {
       expect(hexes).not.toContain(banned)
     }
   })
+
+  it('locks spec fill and stroke pairs', () => {
+    expect(PALETTES.dark.map((t) => [t.fill, t.stroke])).toEqual([
+      ['#2f5d50', '#7aa894'],
+      ['#35536e', '#7a9bb8'],
+      ['#6b5344', '#c4a890'],
+      ['#3d5c5c', '#7aabab'],
+      ['#5c4a32', '#c4a878'],
+      ['#4a5a3c', '#9bb07a'],
+      ['#5a4040', '#c49090'],
+      ['#3c4a5c', '#7a90a8'],
+    ])
+    expect(PALETTES.default.map((t) => [t.fill, t.stroke])).toEqual([
+      ['#c5d9ce', '#2f5d50'],
+      ['#c5d0dc', '#35536e'],
+      ['#e2d4c4', '#6b5344'],
+      ['#c5d6d6', '#3d5c5c'],
+      ['#ddd4c4', '#5c4a32'],
+      ['#d4dcc5', '#4a5a3c'],
+      ['#e0cccc', '#5a4040'],
+      ['#d0d4dc', '#3c4a5c'],
+    ])
+  })
 })
 
 describe('shuffle', () => {
