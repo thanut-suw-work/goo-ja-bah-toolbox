@@ -14,12 +14,12 @@ export function parseUserFills(source: string): UserFills {
   const ganttStatusNames = new Set<string>()
 
   if (/\bactorBkg['"]?\s*:/.test(source)) skipFamilies.add('sequence')
-  if (/\bprimaryColor\s*:/.test(source)) {
+  if (/\bprimaryColor['"]?\s*:/.test(source)) {
     skipFamilies.add('flowchart')
     skipFamilies.add('class')
     skipFamilies.add('er')
   }
-  if (/\btaskBkgColor\s*:/.test(source)) skipFamilies.add('gantt')
+  if (/\btaskBkgColor['"]?\s*:/.test(source)) skipFamilies.add('gantt')
 
   for (const m of source.matchAll(/^\s*style\s+(\S+)\s+([^\n]+)/gim)) {
     if (FILL_RE.test(m[2]!)) ids.add(m[1]!)

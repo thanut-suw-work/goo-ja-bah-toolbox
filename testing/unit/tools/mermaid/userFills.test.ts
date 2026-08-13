@@ -45,8 +45,20 @@ describe('parseUserFills', () => {
     expect(u.skipFamilies.has('er')).toBe(true)
   })
 
+  it('skips flowchart class and er when primaryColor is quoted in init', () => {
+    const u = parseUserFills("%%{init: {'themeVariables': {'primaryColor': '#fff'}}}%%")
+    expect(u.skipFamilies.has('flowchart')).toBe(true)
+    expect(u.skipFamilies.has('class')).toBe(true)
+    expect(u.skipFamilies.has('er')).toBe(true)
+  })
+
   it('skips gantt when taskBkgColor is set', () => {
     const u = parseUserFills('taskBkgColor: #abc')
+    expect(u.skipFamilies.has('gantt')).toBe(true)
+  })
+
+  it('skips gantt when taskBkgColor is quoted in init', () => {
+    const u = parseUserFills("%%{init: {'themeVariables': {'taskBkgColor': '#abc'}}}%%")
     expect(u.skipFamilies.has('gantt')).toBe(true)
   })
 
