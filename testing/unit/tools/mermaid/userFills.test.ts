@@ -28,6 +28,18 @@ describe('parseUserFills', () => {
     expect(u.ids.has('C')).toBe(false)
   })
 
+  it('keeps classDef fill when later classDef restyles without fill', () => {
+    const u = parseUserFills(
+      'classDef foo fill:#f96\nclassDef foo stroke:red\nclass A foo',
+    )
+    expect(u.ids.has('A')).toBe(true)
+  })
+
+  it('does not record class id when classDef has no fill', () => {
+    const u = parseUserFills('classDef bar stroke:#333\nclass C bar')
+    expect(u.ids.has('C')).toBe(false)
+  })
+
   it('records ::: classname when that classDef has fill', () => {
     const u = parseUserFills('classDef foo fill:#f96\nA:::foo')
     expect(u.ids.has('A')).toBe(true)

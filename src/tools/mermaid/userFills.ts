@@ -27,7 +27,7 @@ export function parseUserFills(source: string): UserFills {
 
   const classHasFill = new Map<string, boolean>()
   for (const m of source.matchAll(/^\s*classDef\s+(\S+)\s+([^\n]+)/gim)) {
-    classHasFill.set(m[1]!, FILL_RE.test(m[2]!))
+    classHasFill.set(m[1]!, Boolean(classHasFill.get(m[1]!)) || FILL_RE.test(m[2]!))
   }
 
   for (const m of source.matchAll(/^\s*class\s+(\S+)\s+(\S+)/gim)) {
