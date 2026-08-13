@@ -118,16 +118,32 @@ function colorizeInner(
       paintLabels(group, triple)
     }
   } else if (type === 'gantt') {
+    const consumed = new Set<Element>()
+    const nextLabel = (task: Element): Element | null => {
+      const parent = task.parentElement
+      if (parent) {
+        for (const t of parent.querySelectorAll('text')) {
+          if (consumed.has(t)) continue
+          consumed.add(t)
+          return t
+        }
+      }
+      for (const t of root.querySelectorAll('text')) {
+        if (consumed.has(t)) continue
+        consumed.add(t)
+        return t
+      }
+      return null
+    }
     for (const task of root.querySelectorAll('rect.task')) {
-      const sib = task.nextElementSibling
-      const name =
-        sib?.localName === 'text' ? (sib.textContent ?? '').trim() : ''
+      const label = nextLabel(task)
+      const name = (label?.textContent ?? '').trim()
       if (user.ganttStatusNames.has(name)) continue
       const triple = colorFor(name)
       paintGeoms([task], triple)
-      if (sib?.localName === 'text') {
-        sib.setAttribute('fill', triple.label)
-        ;(sib as HTMLElement).style.color = triple.label
+      if (label) {
+        label.setAttribute('fill', triple.label)
+        ;(label as HTMLElement).style.color = triple.label
       }
     }
   }
@@ -154,6 +170,8 @@ function flowchartKey(node: Element): string {
   const dataId = node.getAttribute('data-id')
   if (dataId) return dataId
   const id = node.getAttribute('id') ?? ''
+  const numbered = id.match(/^flowchart-(.+)-(\d+)$/)
+  if (numbered) return numbered[1]!
   if (id.startsWith('flowchart-')) return id.slice('flowchart-'.length)
   return id
 }

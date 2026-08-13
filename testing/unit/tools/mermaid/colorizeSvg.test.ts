@@ -42,6 +42,21 @@ const GANTT = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescription="gan
   <text>Wireframes</text>
 </svg>`
 
+const GANTT_GROUPED = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescription="gantt">
+  <g>
+    <rect class="section section0" fill="#b4ac76"/>
+    <rect class="task task0" fill="#595c5c"/>
+    <rect class="task task1" fill="#595c5c"/>
+    <text>Research</text>
+    <text>Wireframes</text>
+  </g>
+</svg>`
+
+const FLOW_ENGINE_ID = `<svg xmlns="http://www.w3.org/2000/svg" aria-roledescription="flowchart-v2">
+  <g class="node" id="flowchart-A-12"><rect class="label-container" fill="#1f2020" stroke="#ccc"/><text fill="#ccc">Start</text></g>
+  <g class="node" id="flowchart-B-13"><polygon class="label-container" fill="#1f2020" stroke="#ccc"/></g>
+</svg>`
+
 describe('colorizePreview', () => {
   it('recolors unstyled flowchart nodes and skips clusters', () => {
     const { previewSvg, colored } = colorizePreview(FLOW, 'flowchart TD\nA-->B', 'dark', rng0)
@@ -86,6 +101,23 @@ describe('colorizePreview', () => {
     const tasks = fills(previewSvg, 'rect.task')
     expect(tasks[0]).toBe('#595c5c')
     expect(tasks[1]).not.toBe('#595c5c')
+  })
+
+  it('pairs grouped gantt task rects with unused text labels', () => {
+    const src = 'gantt\nResearch :crit, a1, 2026-01-01, 7d\nWireframes :a2, after a1, 5d'
+    const { previewSvg } = colorizePreview(GANTT_GROUPED, src, 'dark', rng0)
+    const tasks = fills(previewSvg, 'rect.task')
+    expect(tasks[0]).toBe('#595c5c')
+    expect(tasks[1]).not.toBe('#595c5c')
+  })
+
+  it('leaves a style-fill id unchanged when engine uses flowchart-A-N ids', () => {
+    const src = 'flowchart TD\nA-->B\nstyle A fill:#f96'
+    const { previewSvg } = colorizePreview(FLOW_ENGINE_ID, src, 'dark', rng0)
+    const a = new DOMParser()
+      .parseFromString(previewSvg, 'image/svg+xml')
+      .querySelector('g.node[id="flowchart-A-12"] .label-container')
+    expect(a?.getAttribute('fill')).toBe('#1f2020')
   })
 
   it('passthrough unsupported types', () => {
